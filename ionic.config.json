@@ -1,0 +1,8 @@
+{
+  "name": "PantryPrism",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "a9e3c54c"
+}
