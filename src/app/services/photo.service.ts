@@ -15,6 +15,9 @@ export class PhotoService {
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       quality: 100
+    }).then()
+    .catch((err)=>{
+      console.warn(err);
     });
   }
 }
