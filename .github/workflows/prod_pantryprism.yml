@@ -20,12 +20,24 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
+          
+      - name: Setup Ionic
+      # You may pin to the exact commit or the version.
+      # uses: coturiv/setup-ionic@f2df4aec71522c35f441b19d5b8c81c2440076f6
+        uses: coturiv/setup-ionic@v1.0.4
+        with:
+    # Version range or exact version of Cordova to use
+          cordova-version: 10
+    # Version range or exact version of Ionic to use
+          ionic-version: 6
+    
 
       - name: npm install, build, and test
         run: |
           npm install
           npm run build --if-present
-          npm run test --if-present
+          
+          
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
