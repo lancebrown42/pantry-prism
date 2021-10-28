@@ -12,14 +12,32 @@
       <ion-title size="large">Inventory</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-list>
+    <ion-card>
+      
+      
+    </ion-card>
+    <div *ngFor="let item of inventory">
+      
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="{{item.img}}">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{item.description}}</h2>
+          <h3>On hand: {{item.quantity}}</h3>
+        </ion-label>
+        
+      </ion-item>
+    </div>
+  </ion-list>
 <!-- item addition button -->
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addPhotoToGallery()">
       <ion-icon name="add-circle"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
-  
 
 
 </ion-content>
