@@ -1,9 +1,55 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>registration</ion-title>
+  <ion-toolbar color="danger">
+    <ion-title>Register</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="center">
+    <h1>Create Account</h1>
+  </div>
+  <form>
+    <ion-list required="true">
+      <!-- Take Username, FirstName, LastName, Address, Email, Date Of Birth, Password, Gender -->
+      <ion-item>
+        <ion-label position="stacked">Username</ion-label>
+        <ion-input type='text'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input type='password'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">First Name</ion-label>
+        <ion-input type='text'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Last Name</ion-label>
+        <ion-input type='text'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Address</ion-label>
+        <ion-input type='text'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input type='email'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Date Of Birth</ion-label>
+        <ion-input type='date'></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Gender</ion-label>
+        <ion-input type='text'></ion-input>
+      </ion-item>
 
+      <ion-item>
+        Already have an account?:<a routerLink='/login'>Sign In</a>
+      </ion-item>
+
+      <ion-button expand="block" shape="round" color="success">Create Account</ion-button>
+    </ion-list>
+  </form>
+  <ion-button href="/tabs/home">Home</ion-button>
 </ion-content>
