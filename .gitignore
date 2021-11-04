@@ -14,6 +14,7 @@ UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
 
 env.json
+/server/model/config.js
 *.log
 log.txt
 npm-debug.log*

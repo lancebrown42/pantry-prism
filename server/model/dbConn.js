@@ -20,7 +20,7 @@ connection.on('connect', function (err) {
 connection.connect();
 function executeStatement () {
 
-  request = new Request("select * from db_owner.TConnTest", function (err, rowCount) {
+  request = new Request("select TOP 10 * from db_owner.TInventories", function (err, rowCount) {
       console.log(rowCount);
     if (err) {
       console.log(err)
