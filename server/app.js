@@ -21,47 +21,9 @@ const sequelize = new Sequelize(database, userName, password,{
   }
 })
 
-
 //models
-const User = sequelize.define('User', {
-  id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-  },
-// Model attributes are defined here
-firstName: {
-  type: DataTypes.STRING,
-  allowNull: false,
-},
-lastName: {
-  type: DataTypes.STRING,
-  allowNull: false,
-},
-address: {
-    type: DataTypes.STRING,
-},
-DOB:{
-    type: DataTypes.DATE,
-    allowNull: false,
-},
-email:{
-    type: DataTypes.STRING,
-    allowNull: false,
-},
-gender:{
-    type: DataTypes.STRING,
-    allowNull: false,
-},
-password:{
-    type: DataTypes.STRING,
-    allowNull: false,
-}
-}, {
-  tableName: 'CPDM_GroupC.db_owner.TUsers'
-// Other model options go here
-});
+const User = sequelize.define('User', require('./model/user'),{tableName: 'TUsers'});
+
 
 /**old db conn */
 // var db = require('./model/dbConn');
@@ -81,7 +43,8 @@ sequelize
   sequelize.sync()
   .then(() => {
     console.log(`Database & tables synced!`);
-    // User.findAll().then(users=> console.log(users))
+    
+    User.count().then(users=> console.log(users + " users in db"))
     
   });
 
