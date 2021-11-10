@@ -2,37 +2,37 @@
 const {Sequelize, Model, DataTypes} = require('sequelize');
 
 const User =  {
-  id: {
+  intUserId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
   },
 // Model attributes are defined here
-firstName: {
+strFirstName: {
   type: DataTypes.STRING,
   allowNull: false,
 },
-lastName: {
+strLastName: {
   type: DataTypes.STRING,
   allowNull: false,
 },
-address: {
+strAddress: {
     type: DataTypes.STRING,
 },
-DOB:{
+dtmDateOfBirth:{
     type: DataTypes.DATE,
     allowNull: false,
 },
-email:{
+strEmailAddress:{
     type: DataTypes.STRING,
     allowNull: false,
 },
-gender:{
+strGender:{
     type: DataTypes.STRING,
     allowNull: false,
 },
-password:{
+strPassword:{
     type: DataTypes.STRING,
     allowNull: false,
 }

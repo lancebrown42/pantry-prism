@@ -22,7 +22,9 @@ const sequelize = new Sequelize(database, userName, password,{
 })
 
 //models
-const User = sequelize.define('User', require('./model/user'),{tableName: 'TUsers'});
+const User = sequelize.define('User', require('./model/user'),{timestamps: false, createdAt: false, updatedAt: false, tableName: 'TUsers',initialAutoIncrement: 1});
+const UserItem = sequelize.define('UserItem', require('./model/UserItem'), {timestamps: false, createdAt: false, updatedAt: false, tableName: 'TUserInventories',initialAutoIncrement: 1})
+const Item =  sequelize.define('Item', require('./model/Item'), {timestamps: false, createdAt: false, updatedAt: false, tableName: 'TInventories',initialAutoIncrement: 1})
 
 
 /**old db conn */
@@ -43,9 +45,55 @@ sequelize
   sequelize.sync()
   .then(() => {
     console.log(`Database & tables synced!`);
-    
-    User.count().then(users=> console.log(users + " users in db"))
-    
+    User.belongsToMany(Item,
+      {through: 'UserItem',
+        foreignKey: {
+        
+        name: 'intUserId',
+      }});
+    Item.belongsToMany(User,
+      {through: 'UserItem',
+      foreignKey: {
+        name:'intInventoryId',
+      }});
+    User.hasMany(UserItem,{foreignKey: {
+        
+      name: 'intUserId',
+    }});
+    UserItem.belongsTo(User,{foreignKey: {
+        
+      name: 'intUserId',
+    }});
+    Item.hasMany(UserItem,{foreignKey: {
+      name:'intInventoryId',
+    }});
+    UserItem.belongsTo(Item,{foreignKey: {
+      name:'intInventoryId',
+    }});
+
+      
+  }).then(()=>{
+    User.count().then(users=> console.log(users + " users in db"));
+      Item.count().then(items=> console.log(items + " items in db"));
+      try{
+        const findoneUser = User.findOne({where:{
+        intUserID : 1
+      },
+      include:{
+        model: UserItem,
+        include:{
+          model: Item
+        }
+      }
+    }).then((findoneUser)=>{
+
+      console.log(`Findone: "${findoneUser.strFirstName}"`)
+    }
+
+    )
+  }catch(error){
+    console.error(error)
+  }
   });
 
  
