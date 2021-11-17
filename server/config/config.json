@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "CPDM_lbrown11",
+    "password": "0671312",
+    "database": "CPDM-GroupC",
+    "host": "itd2.cincinnatistate.edu",
+    "dialect": "mssql"
+  },
+  "test": {
+    "username": "CPDM_lbrown11",
+    "password": "0671312",
+    "database": "CPDM-GroupC",
+    "host": "itd2.cincinnatistate.edu",
+    "dialect": "mssql"
+  },
+  "production": {
+    "username": "CPDM_lbrown11",
+    "password": "0671312",
+    "database": "CPDM-GroupC",
+    "host": "itd2.cincinnatistate.edu",
+    "dialect": "mssql"
+  }
+}
+

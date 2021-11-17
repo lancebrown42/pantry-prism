@@ -1,15 +1,26 @@
 var createError = require('http-errors');
+const cors = require('cors'); 
 var express = require('express');
 var path = require('path');
 const routes = require('./routes');
+const config = require('./config/config.json');
 const bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const PORT = process.env.PORT || 3000;
 
 const {database, userName, password, server, authentication} = require('./model/config');
-const dbConfig = require('./model/config');
+// const dbConfig = require('./model/config');
 const {Sequelize, Model, DataTypes} = require('sequelize');
+
+// Override timezone formatting for MSSQL
+//*********This is neccessary to override date for mssql */
+Sequelize.DATE.prototype._stringify = function _stringify(date, options) {
+  return this._applyTimezone(date, options).format('YYYY-MM-DD HH:mm:ss.SSS');
+};
+
+
+
 const sequelize = new Sequelize(database, userName, password,{
   host: server,
   dialect: 'mssql',
@@ -23,10 +34,11 @@ const sequelize = new Sequelize(database, userName, password,{
 })
 
 //models
-const User = require('./model/user')
-const UserItem = require('./model/UserItem')
-const Item =  require('./model/Item')
+// const User = require('./models/user')
+// const UserItem = require('./models/UserItem')
+// const Item =  require('./models/Item')
 
+const{User,UserItem,Item} = require('./models')
 
 /**old db conn */
 // var db = require('./model/dbConn');
@@ -55,7 +67,7 @@ sequelize
     Item.belongsToMany(User,
       {through: 'UserItem',
       foreignKey: {
-        name:'intInventoryId',
+        name:'intItemId',
       }});
     User.hasMany(UserItem,{foreignKey: {
         
@@ -66,10 +78,10 @@ sequelize
       name: 'intUserId',
     }});
     Item.hasMany(UserItem,{foreignKey: {
-      name:'intInventoryId',
+      name:'intItemId',
     }});
     UserItem.belongsTo(Item,{foreignKey: {
-      name:'intInventoryId',
+      name:'intItemId',
     }});
 
       
@@ -112,6 +124,7 @@ app.use(bodyParser.json())
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
