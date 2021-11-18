@@ -8,7 +8,7 @@
   <div class="center">
     <h1>Sign In</h1>
   </div>
-  <form>
+  <form (ngSubmit)="onSubmit()">
     <ion-list>
       <ion-item>
         <ion-label position="stacked">Username</ion-label>
@@ -23,7 +23,7 @@
         <a routerLink="/registration">Create account</a>
       </ion-item>
 
-      <ion-button expand="block" shape="round" color="success">Sign In</ion-button>
+      <ion-button type="submit" expand="block" shape="round" color="success">Sign In</ion-button>
     </ion-list>
   </form>
   <ion-button href="/tabs/home">Home</ion-button>
