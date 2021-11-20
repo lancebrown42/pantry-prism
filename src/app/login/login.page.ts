@@ -11,11 +11,24 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
   user: User;
+  loginForm = this.formBuilder.group({
+    email:'',
+    password:'',
+  });
+
+
   constructor(private formBuilder: FormBuilder, private userService: UserCrudService,private router: Router) { }
 
   ngOnInit() {
   }
   onSubmit(){
+    this.userService.getByCredentials(this.loginForm.value.email, this.loginForm.value.password)
+    .subscribe(res=>{
+      console.log(res);
+      if(res.intUserId > 0){
+        this.user = res;
+      }
+    });
     this.user={
       intUserId: -1,
       strFirstName: 'PLACEHOLDER',

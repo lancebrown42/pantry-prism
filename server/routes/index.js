@@ -17,6 +17,10 @@ router.get('/userItems/:id',controllers.getItemsByUser);
 
 router.get('/items',controllers.getAllItems);
 
+router.get('/userCreds/:email/:pass', controllers.getUserByCreds);
+
+router.get('/getItemUPC/:upc', controllers.getItemByUPC);
+
 
 
 module.exports = router;
