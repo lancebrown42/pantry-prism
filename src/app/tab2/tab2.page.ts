@@ -44,6 +44,10 @@ export class Tab2Page {
     // this.photoService.addNewToGallery();
   }
   scanBarcode() {
+    console.log('env');
+    console.log(environment);
+    console.log('plat');
+    console.log(this.plat);
     console.log(this.inventory);
     this.scannerService.scanBarcode();
     // this.photoService.addNewToGallery();

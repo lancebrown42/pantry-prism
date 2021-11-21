@@ -11,19 +11,41 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <ion-list>
       <ion-item>
-        <ion-label position="stacked">Username</ion-label>
-        <ion-input type='text' formControlName="email"></ion-input>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input type='text' formControlName="email" required></ion-input>
       </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.email">
+          <div class="error-message" *ngIf="loginForm.get('email').hasError(validation.type) && (loginForm.get('email').dirty || loginForm.get('email').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+        </div>
       <ion-item>
         <ion-label position="stacked">Password</ion-label>
-        <ion-input type='password' formControlName="password"></ion-input>
+        <ion-input id="password" #password type='password' formControlName="password" (ionFocus)="checkFocus(password)" (ionBlur)="checkBlur(password)" required></ion-input>
+        <!-- <ion-label *ngIf="wrongCreds && loginForm.controls.email.dirty && !passFocused" position="stacked" class="validator-error" color="danger">{{errorContent}}</ion-label> -->
       </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.password">
+          <div class="error-message" *ngIf="loginForm.get('password').hasError(validation.type) && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+        <ng-container *ngFor="let validation of validation_messages.password">
+          <div class="error-message" *ngIf="wrongCreds && loginForm.controls.email.dirty && !passFocused">
+            {{errorContent}}
+          </div>
+        </ng-container>
+        </div>
+      
+
 
       <ion-item>
         <a routerLink="/registration">Create account</a>
       </ion-item>
 
-      <ion-button type="submit" expand="block" shape="round" color="success">Sign In</ion-button>
+      <ion-button type="submit" expand="block" shape="round" color="success" [disabled]="loginForm.invalid">Sign In</ion-button>
     </ion-list>
   </form>
   <ion-button href="/tabs/home">Home</ion-button>
