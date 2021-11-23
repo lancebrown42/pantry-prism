@@ -1,22 +1,32 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="header">
+  <ion-toolbar class="toolbar">
     <ion-title>
       Pantry Prism
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content class="auth-form">
   <ion-grid>
     <ion-row>
-      <ion-col align-self-center>
-        <ion-button [routerLink]="['/registration']" expand="block" color="primary">Register</ion-button>
-
-        <span class="divider line one-line"></span>
-
+      <ion-col width="50" style=text-align:center>
+        <ion-button  [routerLink]="['/registration']" size="default" color="primary" margin-vertical="">Register</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="or">or</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
         <div class="already">Already a user?</div>
-
-        <ion-button [routerLink]="['/login']" expand="block" color="danger">Sign In</ion-button>8
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col width="50" style=text-align:center>
+        <ion-button [routerLink]="['/login']" size="default" color="secondary">Sign In</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
