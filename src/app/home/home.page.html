@@ -1,3 +1,5 @@
+
+
 <ion-header>
   <ion-toolbar class="toolbar">
     <ion-title>
@@ -15,6 +17,9 @@
 <ion-content class="auth-form">
 <ion-content *ngIf="!loggedIn" class="auth-form">
   <ion-grid>
+    <ion-row>
+      <br>
+    </ion-row>
     <ion-row>
       <ion-col width="50" style=text-align:center>
         <ion-button  [routerLink]="['/registration']" size="default" color="primary" >Register</ion-button>
