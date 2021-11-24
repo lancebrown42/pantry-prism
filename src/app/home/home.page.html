@@ -16,6 +16,8 @@
 
 <ion-content class="auth-form">
 <ion-content *ngIf="!loggedIn" class="auth-form">
+  <ion-card>
+    <img src="../../assets/pantryphoto.png"/>
   <ion-grid>
     <ion-row>
       <br>
@@ -41,6 +43,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-card>
 </ion-content>
 <ion-content *ngIf="loggedIn">
   <ion-grid>
