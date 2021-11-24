@@ -1,7 +1,7 @@
 
-const {Sequelize, Model, DataTypes} = require('sequelize');
+module.exports=(sequelize,DataTypes)=>{
 
-const Item =  {
+const Item =  sequelize.define('Item',{
   intInventoryId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -22,5 +22,10 @@ qtyQuantity: {
 strImage:{
     type: DataTypes.STRING,
 }
-};
-module.exports = Item;
+}, {
+    timestamps: false,
+    createdAt: false,
+    updatedAt: false,
+    tableName: 'TInventories',
+    initialAutoIncrement: 1});
+}

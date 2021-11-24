@@ -3,15 +3,21 @@
     <ion-title>
       Pantry Prism
     </ion-title>
+    <ion-buttons *ngIf="loggedIn">
+      <ion-button color="danger" (click)="logout()">
+        LOGOUT
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content class="auth-form">
+<ion-content *ngIf="!loggedIn" class="auth-form">
   <ion-grid>
     <ion-row>
       <ion-col width="50" style=text-align:center>
-        <ion-button  [routerLink]="['/registration']" size="default" color="primary" margin-vertical="">Register</ion-button>
+        <ion-button  [routerLink]="['/registration']" size="default" color="primary" >Register</ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -30,4 +36,42 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-content>
+<ion-content *ngIf="loggedIn">
+  <ion-grid>
+    <ion-row>
+      <div>
+
+        <ion-col>
+          <ion-card [routerLink]="['/tabs/tab2']">
+            <ion-card-header>
+              <ion-card-title>Inventory</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              The list of everything in your pantry.
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/tabs/tab1']">
+            <ion-card-header>
+              <ion-card-title>Recipes</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Cook the food from your pantry
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/tabs/tab3']">
+            <ion-card-header>
+              <ion-card-title>Grocery</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Restock your pantry
+            </ion-card-content>
+          </ion-card>
+          
+        </ion-col>
+      </div>
+    </ion-row>
+  </ion-grid>
+
+
 </ion-content>

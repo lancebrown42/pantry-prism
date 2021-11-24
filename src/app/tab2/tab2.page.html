@@ -21,19 +21,26 @@
       
       <ion-item>
         <ion-avatar slot="start">
-          <img src="{{item.img}}">
+          <img src="{{item.strImage}}">
         </ion-avatar>
         <ion-label>
-          <h2>{{item.description}}</h2>
-          <h3>On hand: {{item.quantity}}</h3>
+          <h2>{{item.strDescription}}</h2>
+          <h3>On hand: {{item.intQuantity}}</h3>
         </ion-label>
         
       </ion-item>
     </div>
   </ion-list>
 <!-- item addition button -->
+<!-- ngIf for scanner on cordova env -->
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab *ngIf="isCordova" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="scanBarcode()">
+      <ion-icon name="add-circle"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-- ngIf for photo on not cordova env -->
+  <ion-fab *ngIf="!isCordova" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addPhotoToGallery()">
       <ion-icon name="add-circle"></ion-icon>
     </ion-fab-button>
