@@ -21,6 +21,8 @@ router.get('/userCreds/:email/:pass', controllers.getUserByCreds);
 
 router.get('/getItemUPC/:upc', controllers.getItemByUPC);
 
+router.get('/getItemName/:name', controllers.getItemByName);
+
 
 
 module.exports = router;

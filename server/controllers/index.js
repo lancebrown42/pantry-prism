@@ -1,5 +1,10 @@
 // const Item = require('../model/Item');
 const { User,Item } = require('../models');
+const http = require('http');
+var request = require('request');
+const env = require('../env.json');
+
+
 const createUser = async (req, res) => {
     try {
         const user = await User.create(req.body);
@@ -69,7 +74,34 @@ const getUserByCreds = async(req, res)=>{
 }
 const getItemByUPC = async(req, res)=>{
     try {
-        return(req);
+        var options = {
+            'method': 'GET',
+            'url': 'https://api.spoonacular.com/food/products/upc/:upc?apiKey=' + env.spoonacular['api-key'],
+            'headers': {
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            
+            console.log(response.body);
+          });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+const getItemByName= async(req, res)=>{
+    try {
+        var options = {
+            'method': 'GET',
+            'url': 'https://api.spoonacular.com/food/products/search?query=' + req.body.item + '&number=' + req.body.num + '&apiKey=' + env.spoonacular['api-key'],
+            'headers': {
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            
+            console.log(response.body);
+          });
     } catch (error) {
         return res.status(500).json({error: error.message})
     }
@@ -81,5 +113,6 @@ module.exports = {
     getItemsByUser,
     getUserByCreds,
     getItemByUPC,
+    getItemByName,
     getAllItems,
 }
