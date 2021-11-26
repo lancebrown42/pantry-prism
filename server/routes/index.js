@@ -21,7 +21,7 @@ router.get('/userCreds/:email/:pass', controllers.getUserByCreds);
 
 router.get('/getItemUPC/:upc', controllers.getItemByUPC);
 
-router.get('/getItemName/:name', controllers.getItemByName);
+router.get('/getItemName/:name/:numberOfResults', controllers.getItemByName);
 
 
 

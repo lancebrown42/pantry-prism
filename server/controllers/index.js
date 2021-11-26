@@ -93,7 +93,7 @@ const getItemByName= async(req, res)=>{
     try {
         var options = {
             'method': 'GET',
-            'url': 'https://api.spoonacular.com/food/products/search?query=' + req.body.item + '&number=' + req.body.num + '&apiKey=' + env.spoonacular['api-key'],
+            'url': 'https://api.spoonacular.com/food/products/search?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
             'headers': {
             }
           };
