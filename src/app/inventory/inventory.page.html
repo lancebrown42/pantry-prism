@@ -35,15 +35,32 @@
 <!-- ngIf for scanner on cordova env -->
 
   <ion-fab *ngIf="isCordova" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="scanBarcode()">
+    <ion-fab-button>
       <ion-icon name="add-circle"></ion-icon>
     </ion-fab-button>
+    <ion-fab-list>
+      <ion-fab-button (click)="scanBarcode()">
+        <ion-icon name="barcode"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="manualAdd()">
+        <ion-icon name="create"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+
   </ion-fab>
   <!-- ngIf for photo on not cordova env -->
   <ion-fab *ngIf="!isCordova" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="addPhotoToGallery()">
+    <ion-fab-button>
       <ion-icon name="add-circle"></ion-icon>
     </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="addPhotoToGallery()">
+        <ion-icon name="barcode"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="manualAdd()">
+        <ion-icon name="create"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
 
 

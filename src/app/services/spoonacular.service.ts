@@ -22,4 +22,7 @@ export class SpoonacularService {
   getItemUPC(upc: string): Observable<Item>{
     return this.http.get<Item>(this.baseUrl + 'getItemUPC/' + upc);
   }
+  getItemName(name: string, numResults?: number): Observable<Item>{
+    return this.http.get<Item>(this.baseUrl + 'getItemName/' + name + '/' + (numResults ? numResults : 1));
+  }
 }

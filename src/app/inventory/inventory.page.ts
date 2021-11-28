@@ -11,6 +11,9 @@ import { SpoonacularService } from '../services/spoonacular.service';
 import { BarcodeScanner, BarcodeScanResult } from '@ionic-native/barcode-scanner/ngx';
 import { environment } from 'src/environments/environment';
 import { AlertController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
+import { ItemAddPage } from '../modal/item-add/item-add.page';
+
 // import * as PantryJSON from '../../../db/items.json';
 
 
@@ -22,13 +25,13 @@ import { AlertController } from '@ionic/angular';
 })
 export class inventoryPage {
 
-
+  modalDataResponse: any;
   isCordova: boolean;
   inventory: Item[] = [];
   source: JSON ;
   constructor(public photoService: PhotoService, public scannerService: ScannerService,
     public itemService: ItemCrudService, private plat: Platform, public spoon: SpoonacularService,
-    public alertController: AlertController) {
+    public alertController: AlertController, public modalCtrl: ModalController) {
       //check for cordova for scanner
       this.isCordova = plat.is('cordova');
      }
@@ -52,6 +55,24 @@ export class inventoryPage {
     this.scannerService.scanBarcode();
     // this.photoService.addNewToGallery();
   }
+  async manualAdd(){
+    const modal = await this.modalCtrl.create({
+      component: ItemAddPage,
+      componentProps: {
+        'name': 'The Winter Soldier'
+      }
+    });
+
+    modal.onDidDismiss().then((modalDataResponse) => {
+      if (modalDataResponse !== null) {
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    return await modal.present();
+  }
+  
   populateInventory(){
     this.itemService.getAll()
       .subscribe(
