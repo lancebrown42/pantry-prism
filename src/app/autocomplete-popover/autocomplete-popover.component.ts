@@ -16,11 +16,16 @@ export class AutocompletePopoverComponent implements OnInit {
 
   results$: Observable<Item[]>;
   results: Item[] = [];
+  maxRes = 1;
+  maxResArr = [];
   constructor(public popoverControl: PopoverController, private spoonApi: SpoonacularService, private itemCtrl: ItemCrudService) { }
   ngOnInit() {
+    for(let i=0; i<this.maxRes; i++){
+      this.maxResArr.push(i);
+    }
     console.log(this.search);
-    // this.results$ = this.spoonApi.getItemSuggestion(this.search);
-    this.results$=this.itemCtrl.getAll();
+    this.results$ = this.spoonApi.getItemSuggestion(this.search, this.maxRes);
+    // this.results$=this.itemCtrl.getAll();
 
     const handler=this.results$.subscribe(results=>{
       for(const res of results.values()){
@@ -30,9 +35,11 @@ export class AutocompletePopoverComponent implements OnInit {
       console.log(this.results);
     });
   }
-  async selected(ev: Event){
-    console.log(ev);
-    await this.popoverControl.dismiss();
+  async selected(selection: Item){
+    console.log(selection);
+    // console.log(selection.id);
+    // ev.target
+    await this.popoverControl.dismiss(selection);
   }
 
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Item} from '../models/item.model';
 import {Platform} from '@ionic/angular';
@@ -18,5 +18,8 @@ export class ItemCrudService {
 
   getAll(): Observable<Item[]>{
     return this.http.get<Item[]>(this.baseUrl + 'items');
+  }
+  addBatch(items: Item[]): Observable<any>{
+    return this.http.post(this.baseUrl + 'addItemBatch',items);
   }
 }

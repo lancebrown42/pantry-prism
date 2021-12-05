@@ -7,6 +7,7 @@ import { Item } from 'src/app/models/item.model';
 import { PopoverController } from '@ionic/angular';
 import { SpoonacularService } from '../../services/spoonacular.service';
 import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autocomplete-popover.component';
+
 @Component({
   selector: 'app-item-add',
   templateUrl: './item-add.page.html',
@@ -17,6 +18,8 @@ export class ItemAddPage implements OnInit {
   items: Item[];
   public searchField: FormControl;
   public itemList$: Observable<Item[]>;
+  popOpen: boolean;
+  popover: HTMLIonPopoverElement;
   constructor(
     public popoverController: PopoverController,
     private modalCtr: ModalController,
@@ -29,12 +32,17 @@ export class ItemAddPage implements OnInit {
     const searchTerm$ = this.searchField.valueChanges.pipe(
       startWith(this.searchField)
     );
-    this.items = [{intItemId: 9999, strDescription: 'aaaa'}, {intItemId: 9998, strDescription: 'bbbb'}];
+    this.items = [];
     // this.items.push(new Item());
     const itemList$ = new Observable<Item[]>();
-    this.searchField.valueChanges.subscribe(search=>{
+    this.searchField.valueChanges.subscribe(async search=>{
       console.log(search);
       // this.itemList$ = this.spoonApi.getItemSuggestion(search, 5);
+      if(this.popover){
+        console.log('POPOVER ALREADY OPEN');
+        await this.popover.dismiss();
+        // await this.popover.onDidDismiss();
+      }
       this.presentPopover(searchTerm$);
     });
     // this.itemList$ = combineLatest([itemList$, searchTerm$]).pipe(
@@ -48,24 +56,30 @@ export class ItemAddPage implements OnInit {
   }
 
   async close() {
-    const closeModal = 'Modal Closed';
+    // const closeModal = 'Modal Closed';
     console.log(this.searchField.value);
-    await this.modalCtr.dismiss(closeModal);
+    await this.modalCtr.dismiss(this.items);
   }
   async presentPopover(ev: any) {
-    const popover = await this.popoverController.create({
+    this.popover = await this.popoverController.create({
       component: AutocompletePopoverComponent,
       cssClass: 'searchbarAutocomplete',
       event: ev,
       translucent: false,
       showBackdrop: false,
-      backdropDismiss: false,
-      componentProps: {search: this.searchField.value}
+      // backdropDismiss: false,
+      keyboardClose: false,
+      componentProps: {search: this.searchField.value},
     });
-    await popover.present();
-
-    const { role } = await popover.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
+    this.popOpen = true;
+    await this.popover.present();
+    const { role, data } = await this.popover.onDidDismiss();
+    this.popOpen = false;
+    console.log('onDidDismiss resolved with role', role, '\n returning data', data);
+    if(data){
+      this.items.push(data);
+      this.searchField.setValue(null);
+    }
   }
 
 }

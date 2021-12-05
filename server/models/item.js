@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
   },
     strSku: DataTypes.STRING,
     strDescription: DataTypes.STRING,
-    intQuantity: DataTypes.INTEGER,
+    intQuantity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
+
     strImage: DataTypes.STRING,
     strExtendedDescription: DataTypes.STRING,
     spoonacularId: DataTypes.INTEGER

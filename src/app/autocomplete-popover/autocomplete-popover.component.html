@@ -1,9 +1,28 @@
 <ion-content>
-  <ion-list>
-      <ion-item *ngFor="let option of results" (click)="selected">
+  <div *ngIf="results[0]">
+
+      <ion-list>
+        <ion-item *ngFor="let option of results" (click)="selected(option)" [attr.id]="option.spoonacularId">
+          <ion-thumbnail>
+            <img src="{{option.strImage}}">
+          </ion-thumbnail>
+          <ion-label class="ion-text-capitalize">
+            {{option.strDescription}}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    
+  </div>
+  <div *ngIf="!results[0]">
+    <ion-list>
+      <ion-item *ngFor="let i of maxResArr">
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
         <ion-label>
-          {{option.strDescription}}
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
         </ion-label>
       </ion-item>
-  </ion-list>
+    </ion-list>
+  </div>
 </ion-content>

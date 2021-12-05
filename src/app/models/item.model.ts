@@ -4,4 +4,5 @@ export class Item {
     strDescription?: string;
     intQuantity?: number;
     strImage?: string;
+    spoonacularId?: number;
 }

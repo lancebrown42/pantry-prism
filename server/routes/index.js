@@ -29,6 +29,8 @@ router.get('/getItemSuggest/:name/:numberOfResults', controllers.getItemSuggesti
 
 router.get('/getItemId/:id', controllers.getItemByID);
 
+router.post('/addItemBatch', controllers.addItemBatch);
+
 
 
 

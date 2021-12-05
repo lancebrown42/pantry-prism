@@ -66,6 +66,9 @@ export class inventoryPage {
         this.modalDataResponse = modalDataResponse.data;
         console.log('Modal Sent Data : '+ modalDataResponse.data);
       }
+    }).then(async ()=>{
+      const itemCreate = await this.itemService.addBatch(this.modalDataResponse);
+      console.log('Item service returned', itemCreate);
     });
 
     return await modal.present();

@@ -31,3 +31,18 @@
     font-family:cursive;
     
   }
+  .searchbar{
+    position: relative;
+}
+  .searchbarAutocomplete .popover-content{
+    // position: sticky;
+    transform: translate(-275%, -50%);
+    // top: 0;
+    // left: 0;
+
+    // {style: {
+    //   position: 'sticky',
+    //   screenTop: '0',
+    //   screenLeft:'0'
+    // }}
+}
