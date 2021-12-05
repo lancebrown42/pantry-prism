@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {Item} from '../models/item.model';
 import {Platform} from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { User } from '../models/user.model';
 
 
 @Injectable({
@@ -21,5 +22,8 @@ export class ItemCrudService {
   }
   addBatch(items: Item[]): Observable<any>{
     return this.http.post(this.baseUrl + 'addItemBatch',items);
+  }
+  getAllUser(user: User): Observable<Item[]>{
+    return this.http.get<Item[]>(this.baseUrl + 'userItems/' + user.intUserId);
   }
 }

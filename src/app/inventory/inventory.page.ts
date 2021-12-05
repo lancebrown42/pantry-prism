@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { AlertController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { ItemAddPage } from '../modal/item-add/item-add.page';
+import { User } from '../models/user.model';
 
 // import * as PantryJSON from '../../../db/items.json';
 
@@ -25,7 +26,7 @@ import { ItemAddPage } from '../modal/item-add/item-add.page';
   styleUrls: ['inventory.page.scss']
 })
 export class inventoryPage {
-
+  user: User;
   modalDataResponse: any;
   isCordova: boolean;
   inventory: Item[] = [];
@@ -37,6 +38,7 @@ export class inventoryPage {
       this.isCordova = plat.is('cordova');
      }
   ionViewWillEnter(){
+    this.user = JSON.parse(sessionStorage.getItem('user'));
     this.populateInventory();
   }
   addPhotoToGallery() {
@@ -75,14 +77,16 @@ export class inventoryPage {
   }
 
   populateInventory(){
-    this.itemService.getAll()
+    if(this.user){
+
+      this.itemService.getAllUser(this.user)
       .subscribe(
         data=>{
           this.source = JSON.parse(JSON.stringify(data));
           console.log(this.source);
-
-          for(let item in this.source){
-            item = JSON.parse(JSON.stringify(this.source[item]));
+          const items = JSON.parse(JSON.stringify(this.source)).Items;
+          for(let item of items){
+            console.log(item);
             // console.log('item');
             // console.log(item);
             let it;
@@ -92,7 +96,27 @@ export class inventoryPage {
             this.inventory.push(it);
           }
         }
-      );
+        );
+      }else{
+
+        this.itemService.getAll()
+        .subscribe(
+          data=>{
+            this.source = JSON.parse(JSON.stringify(data));
+            // console.log(this.source);
+            for(let item of JSON.parse(JSON.stringify(this.source))){
+              // console.log(item);
+              // console.log('item');
+              // console.log(item);
+              let it;
+              it = item;
+              // console.log('it');
+              // console.log(it);
+              this.inventory.push(it);
+            }
+          }
+          );
+        }
   }
 
 }
