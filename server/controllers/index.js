@@ -93,7 +93,58 @@ const getItemByName= async(req, res)=>{
     try {
         var options = {
             'method': 'GET',
-            'url': 'https://api.spoonacular.com/food/products/search?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
+            'url': 'https://api.spoonacular.com/food/products?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
+            'headers': {
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            
+            console.log(response.body);
+          });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+const getItemByID= async(req, res)=>{
+    try {
+        var options = {
+            'method': 'GET',
+            'url': 'https://api.spoonacular.com/food/products/?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
+            'headers': {
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            
+            console.log(response.body);
+          });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+const getRecipeSuggestions= async(req, res)=>{
+    try {
+        var options = {
+            'method': 'GET',
+            'url': 'https://api.spoonacular.com/recipes/autocomplete?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
+            'headers': {
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            
+            console.log(response.body);
+          });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+const getItemSuggestion= async(req, res)=>{
+    try {
+        var options = {
+            'method': 'GET',
+            'url': 'https://api.spoonacular.com/food/suggest?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
             'headers': {
             }
           };
@@ -115,4 +166,9 @@ module.exports = {
     getItemByUPC,
     getItemByName,
     getAllItems,
+    getRecipeSuggestions,
+    getItemSuggestion,
+    getItemByID,
+
+
 }

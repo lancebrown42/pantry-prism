@@ -22,7 +22,15 @@ export class SpoonacularService {
   getItemUPC(upc: string): Observable<Item>{
     return this.http.get<Item>(this.baseUrl + 'getItemUPC/' + upc);
   }
-  getItemName(name: string, numResults?: number): Observable<Item>{
-    return this.http.get<Item>(this.baseUrl + 'getItemName/' + name + '/' + (numResults ? numResults : 1));
+  getItemName(name: string, numResults?: number): Observable<Item[]>{
+    return this.http.get<Item[]>(this.baseUrl + 'getItemName/' + name + '/' + (numResults ? numResults : 1));
+  }
+  getItemSuggestion(name: string, numResults?: number): Observable<Item[]>{
+    return this.http.get<Item[]>(this.baseUrl + 'getItemSuggest/' + name + '/' + (numResults ? numResults : 1));
+
+  }
+  getItemByID(id: number): Observable<Item>{
+    return this.http.get<Item>(this.baseUrl + 'getItemId/' + id);
+
   }
 }

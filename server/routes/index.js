@@ -23,6 +23,14 @@ router.get('/getItemUPC/:upc', controllers.getItemByUPC);
 
 router.get('/getItemName/:name/:numberOfResults', controllers.getItemByName);
 
+router.get('/recipes/autocomplete/:name/:numberOfResults', controllers.getRecipeSuggestions);
+
+router.get('/getItemSuggest/:name/:numberOfResults', controllers.getItemSuggestion);
+
+router.get('/getItemId/:id', controllers.getItemByID);
+
+
+
 
 
 module.exports = router;

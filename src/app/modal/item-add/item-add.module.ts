@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import{AutocompletePopoverComponent} from '../../autocomplete-popover/autocomplete-popover.component';
 import { IonicModule } from '@ionic/angular';
 
 import { ItemAddPageRoutingModule } from './item-add-routing.module';
@@ -13,8 +13,10 @@ import { ItemAddPage } from './item-add.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ItemAddPageRoutingModule
+    ItemAddPageRoutingModule,
+    ReactiveFormsModule,
   ],
-  declarations: [ItemAddPage]
+  declarations: [ItemAddPage, AutocompletePopoverComponent],
+
 })
 export class ItemAddPageModule {}

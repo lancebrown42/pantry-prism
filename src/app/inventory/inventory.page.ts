@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable prefer-const */
 /* eslint-disable guard-for-in */
 import { Component } from '@angular/core';
@@ -58,9 +59,6 @@ export class inventoryPage {
   async manualAdd(){
     const modal = await this.modalCtrl.create({
       component: ItemAddPage,
-      componentProps: {
-        'name': 'The Winter Soldier'
-      }
     });
 
     modal.onDidDismiss().then((modalDataResponse) => {
@@ -72,7 +70,7 @@ export class inventoryPage {
 
     return await modal.present();
   }
-  
+
   populateInventory(){
     this.itemService.getAll()
       .subscribe(

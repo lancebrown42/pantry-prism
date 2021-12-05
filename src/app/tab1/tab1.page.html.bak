@@ -1,0 +1,133 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="toolbar">
+    <ion-title>
+      Recipes
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Recipes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-item>
+    <ion-label>Recipe</ion-label>
+    <!-- <ionic-selectable
+      [(ngModel)]="searchInput"
+      itemValueField="id"
+      itemTextField="title"
+      [items]="recipes"
+      searchPlaceholder="Search recipe"
+      [searchDebounce]="1000"
+      name="Search"
+      ngDefaultControl 
+>
+    </ionic-selectable> -->
+    <ionic-selectable
+      [(ngModel)]="searchInput"
+      itemValueField="id"
+      itemTextField="title"
+      [items]="recipes"
+      [canSearch]="true"
+      searchPlaceholder="Search recipe"
+      [searchDebounce]="1000"
+      name="Search"
+      ngDefaultControl 
+      (onSearch)="searchBoxRecipes($event)">
+    </ionic-selectable>
+  </ion-item>
+  <!-- <form>
+  <div
+    style="display: flex; align-items: center;margin-top: 10px">
+
+
+      <ion-searchbar
+        type="text"
+        inputmode="search"
+        placeholder="Search your favourite recipe"
+        debounce="1000"
+        [formControl]="recipeAutoComplete"
+        #recipeSearch
+        name="recipeSearch"
+        [(ngModel)]="searchInput"
+        (ionInput)="onRecipeAutoCompleteValueChange()"
+        
+      ></ion-searchbar> -->
+
+      <!-- <mat-autocomplete
+        autoActiveFirstOption
+        #auto="matAutocomplete"
+        [displayWith]="recipeDisplayValue"
+        (optionSelected)="onRecipeSelect($event)"
+      > -->
+      
+      
+<!-- 
+        <div class="list">
+          <li 
+          *ngFor="let recipe of recipeAutoComplete$ | async"
+          [value]="recipe"
+          >
+          {{ recipe.title }}
+          </li>
+      </div> -->
+    
+      <!-- </mat-autocomplete> -->
+
+    <!-- <mat-spinner
+      [color]="spinnerColor"
+      [diameter]="30"
+      [ngClass]="{ visible: loading, hidden: !loading }"
+      [strokeWidth]="2"
+      [mode]="'indeterminate'"
+      style="margin: 5px"
+    >
+    </mat-spinner>
+  </div>
+</form> -->
+<div *ngIf="recipe$ | async as recipe" @slideUp class="info-main">
+  <div class="recipe-info-section">
+    <div style="display: flex; align-items: center">
+      <h1>{{ recipe.title }}</h1>
+      <div
+        *ngIf="recipe.vegetarian"
+        style="margin-bottom: 16px; margin-left: 5px; color: darkgreen"
+      >
+        (Veg {{ recipe.vegan ? ", Vegan" : ""
+        }}{{ recipe.glutenFree ? ", Gluten free" : ""
+        }}{{ recipe.dairyFree ? ", Dairy free" : "" }})
+      </div>
+    </div>
+
+    <img [src]="recipe.image" alt="Dish image" />
+    <h4>
+      {{ recipe.readyInMinutes }} minutes preparation time for
+      {{ recipe.servings }} Servings
+    </h4>
+    <h4 class="heading">Summary</h4>
+    <p [innerHTML]="recipe.summary"></p>
+    <div>
+      <h3 class="heading">Instructions:</h3>
+      <div
+        *ngFor="let instruction of recipe.analyzedInstructions"
+        style="margin-left: 5px"
+      >
+        <div *ngFor="let step of instruction.steps">
+          <h4 class="heading">
+            Step {{ step.number }}
+            <span style="font-weight: normal"
+              >(Ingredients: {{ showIngredients(step.ingredients) }})</span
+            >
+          </h4>
+          <p>
+            {{ step.step }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div style="font-size: 16px">Stay safe and healthy!</div>
+  </div>
+</div>
+</ion-content>

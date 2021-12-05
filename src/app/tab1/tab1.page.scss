@@ -1,0 +1,32 @@
+.search-bar-position {
+    position: relative;
+    width: 100%;
+  }
+  
+  .visible {
+    display: block;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .info-main {
+    position: relative;
+  }
+  
+  .recipe-info-section {
+    padding: 15px;
+    background-color: fuchsia;
+  }
+  
+  .heading {
+    font-weight: 450;
+  }
+  
+  p {
+    cursor: not-allowed;
+    text-decoration: none;
+    color: black;
+    pointer-events: none;
+  }
