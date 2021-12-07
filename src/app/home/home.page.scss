@@ -6,7 +6,16 @@ ion-card{
 	  text-align: center;
 	  align-content: center;
 	  align-self: center;
-	  max-width: 710px;
-	  max-height: 710px;
+	  //max-width: 710px;
+	  //max-height: 710px;
 	}
+}
+
+.logo {
+	max-width: 100px;
+	max-height: 100px;
+}
+
+.dark-text {
+	color: black;
 }
