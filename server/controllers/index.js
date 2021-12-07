@@ -1,10 +1,11 @@
 // const Item = require('../model/Item');
-const { User,Item } = require('../models');
+const { User,Item,Recipe } = require('../models');
 const http = require('http');
 var request = require('request');
 const env = require('../env.json');
 const item = require('../models/item');
 const user = require('../models/user');
+const recipe = require('../models/recipe')
 
 
 const createUser = async (req, res) => {
@@ -225,6 +226,139 @@ const getItemSuggestion= async(req, res)=>{
         return res.status(500).json({error: error.message})
     }
 }
+const getRecipeIngredients = async (req, res) =>{
+    try {
+        var body = JSON.parse(JSON.stringify(req.body));
+        // console.log(body);
+        
+        var ingredients = body.ingredients;
+        var ingredientsString = "";
+        var recipes = [];
+        var num = body.num ? Number(body.num) : 1;
+        var ignore = body.ignore ? Boolean(body.ignore) : false;
+        for(ing of ingredients){
+            // console.log(ing.strDescription);
+            // console.log("len", ingredientsString.length)
+            if(ingredientsString.length > 0){
+                // console.log("if", ing)
+                ingredientsString =  ingredientsString.concat(',+',ing.strDescription);
+            }
+            else{
+                // console.log("else", ing)
+                ingredientsString = ing.strDescription;
+            }
+            // ingredientsString.concat(ing.strDescription)
+            // console.log("loopstr ", ingredientsString);
+
+        }
+        // console.log(num);
+        // console.log("outside str ", ingredientsString);
+        const test = [
+            {
+                "id": 662665,
+                "title": "Swiss Bircher Muesli",
+                "image": "https://spoonacular.com/recipeImages/662665-312x231.jpg",
+                "imageType": "jpg",
+                "usedIngredientCount": 2,
+                "missedIngredientCount": 2,
+                "missedIngredients": [
+                    {
+                        "id": 42184,
+                        "amount": 0.5,
+                        "unit": "cup",
+                        "unitLong": "cups",
+                        "unitShort": "cup",
+                        "aisle": "Cereal",
+                        "name": "muesli",
+                        "original": "1/2 cup muesli",
+                        "originalString": "1/2 cup muesli",
+                        "originalName": "muesli",
+                        "metaInformation": [],
+                        "meta": [],
+                        "image": "https://spoonacular.com/cdn/ingredients_100x100/granola.jpg"
+                    },
+                    {
+                        "id": 43261,
+                        "amount": 3,
+                        "unit": "tablespoons",
+                        "unitLong": "tablespoons",
+                        "unitShort": "Tbsp",
+                        "aisle": "Milk, Eggs, Other Dairy",
+                        "name": "skim vanilla yoghurt",
+                        "original": "3 tablespoons of plain or vanilla yoghurt",
+                        "originalString": "3 tablespoons of plain or vanilla yoghurt",
+                        "originalName": "plain or vanilla yoghurt",
+                        "metaInformation": [
+                            "plain"
+                        ],
+                        "meta": [
+                            "plain"
+                        ],
+                        "extendedName": "plain skim vanilla yoghurt",
+                        "image": "https://spoonacular.com/cdn/ingredients_100x100/vanilla-yogurt.png"
+                    }
+                ],
+                "usedIngredients": [
+                    {
+                        "id": 9003,
+                        "amount": 1,
+                        "unit": "",
+                        "unitLong": "",
+                        "unitShort": "",
+                        "aisle": "Produce",
+                        "name": "apple",
+                        "original": "1 Apple",
+                        "originalString": "1 Apple",
+                        "originalName": "Apple",
+                        "metaInformation": [],
+                        "meta": [],
+                        "image": "https://spoonacular.com/cdn/ingredients_100x100/apple.jpg"
+                    },
+                    {
+                        "id": 1077,
+                        "amount": 0.5,
+                        "unit": "cup",
+                        "unitLong": "cups",
+                        "unitShort": "cup",
+                        "aisle": "Milk, Eggs, Other Dairy",
+                        "name": "milk",
+                        "original": "1/2 cup of Milk",
+                        "originalString": "1/2 cup of Milk",
+                        "originalName": "Milk",
+                        "metaInformation": [],
+                        "meta": [],
+                        "image": "https://spoonacular.com/cdn/ingredients_100x100/milk.png"
+                    }
+                ],
+                "unusedIngredients": [],
+                "likes": 1
+            }
+        ]
+        var options = {
+            'method': 'GET',
+            'url': 'https://api.spoonacular.com/recipes/findByIngredients?ingredients=' + ingredientsString + '&number=' + num /*+ '&apiKey=' + env.spoonacular['api-key']*/,
+            'headers': {
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            // var obj = JSON.parse(response.body)
+            var obj = JSON.parse(JSON.stringify(test))
+            var ret = [];
+            for(fullrecipe of obj){
+                var rec = Recipe.build({intSpoonacularId: fullrecipe.id})
+                var usedIng = fullrecipe.usedIngredients
+                var missedIng = fullrecipe.missedIngredients
+                ret.push("recipe:",rec,"usedIngredients:", usedIng,"missedIngredients:", missedIng);
+            }
+            return res.status(200).json(ret);
+          });
+    
+        
+    } catch (error) {
+        return res.status(500).json({error: error.message, stack: error.stack})
+    }
+}
 
 module.exports = {
     createUser,
@@ -237,6 +371,7 @@ module.exports = {
     getAllItems,
     getRecipeSuggestions,
     getItemSuggestion,
+    getRecipeIngredients,
     addItemBatch,
     getItemByID,
 

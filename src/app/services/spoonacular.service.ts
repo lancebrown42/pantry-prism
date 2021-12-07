@@ -33,4 +33,10 @@ export class SpoonacularService {
     return this.http.get<Item>(this.baseUrl + 'getItemId/' + id);
 
   }
+  getRecipeByID(id: number): Observable<Recipe>{
+    return this.http.get<Recipe>(this.baseUrl + 'getRecipeInfo/' + id);
+  }
+  getRecipeByIngredients(ingredient: Item[], numResults?: number, ignorePantry?: boolean): Observable<any>{
+    return this.http.post<any>(this.baseUrl + 'getRecipeByIngredients/', {ingredients: ingredient, num: numResults, ignore: ignorePantry});
+  }
 }

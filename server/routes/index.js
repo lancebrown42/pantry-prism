@@ -31,6 +31,8 @@ router.get('/getItemId/:id', controllers.getItemByID);
 
 router.post('/addItemBatch', controllers.addItemBatch);
 
+router.post('/getRecipeByIngredients', controllers.getRecipeIngredients);
+
 
 
 
