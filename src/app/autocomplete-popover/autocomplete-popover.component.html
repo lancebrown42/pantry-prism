@@ -4,10 +4,10 @@
       <ion-list>
         <ion-item *ngFor="let option of results" (click)="selected(option)" [attr.id]="option.spoonacularId">
           <ion-thumbnail>
-            <img src="{{option.strImage}}">
+            <img src="{{option.strImage || option.jsonRecipeData.image}}">
           </ion-thumbnail>
           <ion-label class="ion-text-capitalize">
-            {{option.strDescription}}
+            {{option.strDescription || option.strTitle}}
           </ion-label>
         </ion-item>
       </ion-list>

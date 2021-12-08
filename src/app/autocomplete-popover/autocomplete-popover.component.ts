@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Item } from 'src/app/models/item.model';
 import { SpoonacularService } from '../services/spoonacular.service';
 import { ItemCrudService } from '../services/item-crud.service';
+import { RecipeCrudService } from '../services/recipe-crud.service';
+import { Recipe } from '../models/recipe.model';
 
 
 @Component({
@@ -13,29 +15,55 @@ import { ItemCrudService } from '../services/item-crud.service';
 })
 export class AutocompletePopoverComponent implements OnInit {
   @Input() search: any;
-
-  results$: Observable<Item[]>;
+  @Input() source: string;
+  state: string;
+  results$: Observable<any[]>;
   results: Item[] = [];
-  maxRes = 1;
+  maxRes = 5;
   maxResArr = [];
-  constructor(public popoverControl: PopoverController, private spoonApi: SpoonacularService, private itemCtrl: ItemCrudService) { }
+  constructor(public popoverControl: PopoverController, private spoonApi: SpoonacularService,
+    private itemCtrl: ItemCrudService, private recipeCtrl: RecipeCrudService) { }
   ngOnInit() {
-    for(let i=0; i<this.maxRes; i++){
-      this.maxResArr.push(i);
-    }
-    console.log(this.search);
-    this.results$ = this.spoonApi.getItemSuggestion(this.search, this.maxRes);
-    // this.results$=this.itemCtrl.getAll();
+    this.state = this.source;
+    if(this.state === 'item-add'){
 
-    const handler=this.results$.subscribe(results=>{
-      for(const res of results.values()){
-        this.results.push(res);
-        // console.log(res.strDescription);
+      for(let i=0; i<this.maxRes; i++){
+        this.maxResArr.push(i);
       }
-      console.log(this.results);
-    });
+      console.log(this.search);
+      this.results$ = this.spoonApi.getItemSuggestion(this.search, this.maxRes);
+      // this.results$=this.itemCtrl.getAll();
+      const handler=this.results$.subscribe(results=>{
+        for(const res of results.values()){
+          this.results.push(res);
+          // console.log(res.strDescription);
+        }
+        console.log(this.results);
+      });
+    } else if(this.state === 'recipe'){
+      for(let i=0; i<this.maxRes; i++){
+        this.maxResArr.push(i);
+      }
+      console.log(this.search);
+      this.results$ = this.spoonApi.getRecipeAutocomplete(this.search, this.maxRes);
+      // this.results$=this.itemCtrl.getAll();
+      const handler=this.results$.subscribe(results=>{
+        console.log(results);
+        for(const res of results.values()){
+          this.results.push(res);
+          // console.log(res.strDescription);
+        }
+        console.log(this.results);
+      });
+    }
   }
-  async selected(selection: Item){
+  async selected(selection: any/*item?: Item, recipe?: Recipe*/){
+    // let selection;
+    // if(item){
+    //   selection = item;
+    // }else if(recipe){
+    //   selection = recipe;
+    // }
     console.log(selection);
     // console.log(selection.id);
     // ev.target

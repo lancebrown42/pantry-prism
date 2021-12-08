@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="toolbar">
+      <ion-title>
+        Recipes
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-searchbar id="recipeSearchbar" class="searchbar" placeholder="Search an item to add" debounce="1000" showCancelButton="focus" [formControl]="searchField" animated></ion-searchbar>
+    <ion-list>
+      <ion-item *ngFor="let recipe of recipes">
+        <ion-label class="ion-text-capitalize">{{recipe.strTitle}}</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button>
+        <ion-icon name="save" (click)="close()"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    
+  </ion-content>
+  

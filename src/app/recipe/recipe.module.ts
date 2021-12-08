@@ -2,7 +2,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Tab1Page } from './tab1.page';
+import { RecipePage } from './recipe.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { Component, OnInit } from '@angular/core';
@@ -32,7 +32,7 @@ import {
 
 
 
-import { Tab1PageRoutingModule } from './tab1-routing.module';
+import { RecipePageRoutingModule } from './recipe-routing.module';
 
 @NgModule({
   imports: [
@@ -40,7 +40,7 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab1PageRoutingModule,
+    RecipePageRoutingModule,
     FormsModule,
     MatProgressBarModule,
     ReactiveFormsModule,
@@ -50,8 +50,8 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     MatProgressSpinnerModule,
 
   ],
-  declarations: [Tab1Page, IonicSelectableComponent],
+  declarations: [RecipePage, IonicSelectableComponent],
   providers: [RecipeService, StoreService],
   exports:[IonicSelectableComponent]
 })
-export class Tab1PageModule {}
+export class RecipePageModule {}

@@ -69,7 +69,7 @@ export class ItemAddPage implements OnInit {
       showBackdrop: false,
       // backdropDismiss: false,
       keyboardClose: false,
-      componentProps: {search: this.searchField.value},
+      componentProps: {search: this.searchField.value, source: 'item-add'},
     });
     this.popOpen = true;
     await this.popover.present();

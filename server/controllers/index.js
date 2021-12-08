@@ -175,16 +175,30 @@ const getItemByID= async(req, res)=>{
 }
 const getRecipeSuggestions= async(req, res)=>{
     try {
-        var options = {
-            'method': 'GET',
-            'url': 'https://api.spoonacular.com/recipes/autocomplete?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&apiKey=' + env.spoonacular['api-key'],
-            'headers': {
+        num = req.body.numberOfResults ? req.body.numberOfResults : 3;
+        const options = {
+            method: 'GET',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/autocomplete',
+            qs: {query: req.params.name, number: num},
+            headers: {
+              'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+              'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419',
+              useQueryString: true
             }
           };
-          request(options, function (error, response) {
+          
+          request(options, function (error, response, body) {
             if (error) throw new Error(error);
-            
-            console.log(response.body);
+            var obj = JSON.parse(body) //for testing with live data
+          //   var obj = JSON.parse(JSON.stringify(test)) //for testing without live data -- remember to comment out api key if using this
+            var ret = [];
+            console.log(obj);
+            for(fullrecipe of obj){
+                console.log(fullrecipe);
+                var rec = Recipe.build({intSpoonacularId: fullrecipe.id, strTitle: fullrecipe.title, jsonRecipeData: {image: "https://spoonacular.com/recipeImages/" + fullrecipe.id + "-636x393." + fullrecipe.imageType}})
+                ret.push(rec);
+            }
+            return res.status(200).json(ret);
           });
     } catch (error) {
         return res.status(500).json({error: error.message})
@@ -193,12 +207,22 @@ const getRecipeSuggestions= async(req, res)=>{
 const getItemSuggestion= async(req, res)=>{
     try {
         var items = [];
-        var options = {
-            'method': 'GET',
-            'url': 'https://api.spoonacular.com/food/ingredients/autocomplete?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&metaInformation=true' + '&apiKey=' + env.spoonacular['api-key'],
-            'headers': {
+        const options = {
+            method: 'GET',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete',
+            qs: {query: req.params.name, number: req.params.numberOfResults, intolerances: req.params.intolerances},
+            headers: {
+              'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+              'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419',
+              useQueryString: true
             }
           };
+        // var options = {
+        //     'method': 'GET',
+        //     'url': 'https://api.spoonacular.com/food/ingredients/autocomplete?query=' + req.params.name + '&number=' + req.params.numberOfResults + '&metaInformation=true' + '&apiKey=' + env.spoonacular['api-key'],
+        //     'headers': {
+        //     }
+        //   };
           request(options, function (error, response) {
             if (error) throw new Error(error);
             var obj = JSON.parse(response.body)
@@ -236,6 +260,7 @@ const getRecipeIngredients = async (req, res) =>{
         var recipes = [];
         var num = body.num ? Number(body.num) : 1;
         var ignore = body.ignore ? Boolean(body.ignore) : false;
+        var ranking = body.ranking ? Number(body.ranking) : 2;
         for(ing of ingredients){
             // console.log(ing.strDescription);
             // console.log("len", ingredientsString.length)
@@ -334,25 +359,64 @@ const getRecipeIngredients = async (req, res) =>{
                 "likes": 1
             }
         ]
-        var options = {
-            'method': 'GET',
-            'url': 'https://api.spoonacular.com/recipes/findByIngredients?ingredients=' + ingredientsString + '&number=' + num /*+ '&apiKey=' + env.spoonacular['api-key']*/,
-            'headers': {
+
+
+        const options = {
+            method: 'GET',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients',
+            qs: {
+              ingredients: ingredientsString,
+              number: num,
+              ignorePantry: ignore,
+              ranking: ranking
+            },
+            headers: {
+              'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+              'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419', //comment this out if testing with static data to reduce quota load
+              useQueryString: true
             }
           };
-          request(options, function (error, response) {
-            if (error) throw new Error(error);
-            // var obj = JSON.parse(response.body)
-            var obj = JSON.parse(JSON.stringify(test))
-            var ret = [];
-            for(fullrecipe of obj){
-                var rec = Recipe.build({intSpoonacularId: fullrecipe.id})
-                var usedIng = fullrecipe.usedIngredients
-                var missedIng = fullrecipe.missedIngredients
-                ret.push("recipe:",rec,"usedIngredients:", usedIng,"missedIngredients:", missedIng);
-            }
-            return res.status(200).json(ret);
+          
+          request(options, function (error, response, body) {
+              if (error) throw new Error(error);
+                      var obj = JSON.parse(JSON.stringify(body)) //for testing with live data
+                    //   var obj = JSON.parse(JSON.stringify(test)) //for testing without live data -- remember to comment out api key if using this
+                      var ret = [];
+                      for(fullrecipe of obj){
+                          var rec = Recipe.build({intSpoonacularId: fullrecipe.id})
+                          var usedIng = fullrecipe.usedIngredients
+                          var missedIng = fullrecipe.missedIngredients
+                          ret.push("recipe:",rec,"usedIngredients:", usedIng,"missedIngredients:", missedIng);
+                      }
+                      return res.status(200).json(ret);
           });
+
+
+
+
+
+        /******************************************
+         * Old direct spoonacular api
+         */
+        // var options = {
+        //     'method': 'GET',
+        //     'url': 'https://api.spoonacular.com/recipes/findByIngredients?ingredients=' + ingredientsString + '&number=' + num /*+ '&apiKey=' + env.spoonacular['api-key']*/,
+        //     'headers': {
+        //     }
+        //   };
+        //   request(options, function (error, response) {
+        //     if (error) throw new Error(error);
+            // // var obj = JSON.parse(response.body)
+            // var obj = JSON.parse(JSON.stringify(test))
+            // var ret = [];
+            // for(fullrecipe of obj){
+            //     var rec = Recipe.build({intSpoonacularId: fullrecipe.id})
+            //     var usedIng = fullrecipe.usedIngredients
+            //     var missedIng = fullrecipe.missedIngredients
+            //     ret.push("recipe:",rec,"usedIngredients:", usedIng,"missedIngredients:", missedIng);
+            // }
+            // return res.status(200).json(ret);
+        //   });
     
         
     } catch (error) {

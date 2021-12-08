@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     intSpoonacularId: DataTypes.INTEGER,
-    jsonRecipeData: DataTypes.TEXT
+    jsonRecipeData: DataTypes.TEXT,
+    strTitle: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Recipe',

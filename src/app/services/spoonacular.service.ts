@@ -39,4 +39,8 @@ export class SpoonacularService {
   getRecipeByIngredients(ingredient: Item[], numResults?: number, ignorePantry?: boolean): Observable<any>{
     return this.http.post<any>(this.baseUrl + 'getRecipeByIngredients/', {ingredients: ingredient, num: numResults, ignore: ignorePantry});
   }
+
+  getRecipeAutocomplete(query: string, numResults?: number): Observable<Recipe[]>{
+    return this.http.get<Recipe[]>(this.baseUrl + '/recipes/autocomplete/' + query + '/' + (numResults ? numResults : 1));
+  }
 }
