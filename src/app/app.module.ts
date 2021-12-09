@@ -11,13 +11,25 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Cordova } from '@ionic-native/core';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ReactiveFormsModule } from '@angular/forms';
+// import { IonicSelectableComponent } from '@ionic-selectable/angular';
+import {
+  MatAutocompleteModule
+} from '@angular/material/autocomplete';
+import {
+  MatInputModule
+} from '@angular/material/input';
+
+
+
 
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
+  imports: [BrowserModule, IonicModule.forRoot(), ReactiveFormsModule, MatAutocompleteModule,
+    MatInputModule, AppRoutingModule,
     HttpClientModule, ServiceWorkerModule.register('ngsw-worker.js', {
   enabled: environment.production,
   // Register the ServiceWorker as soon as the app is stable

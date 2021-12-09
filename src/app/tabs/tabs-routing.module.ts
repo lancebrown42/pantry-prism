@@ -8,12 +8,12 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+        path: 'recipe',
+        loadChildren: () => import('../recipe/recipe.module').then(m => m.RecipePageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'inventory',
+        loadChildren: () => import('../inventory/inventory.module').then(m => m.inventoryPageModule)
       },
       {
         path: 'tab3',

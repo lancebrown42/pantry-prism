@@ -1,5 +1,7 @@
+
+
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="toolbar">
     <ion-title>
       Pantry Prism
     </ion-title>
@@ -11,20 +13,34 @@
   </ion-toolbar>
 </ion-header>
 
+
+<ion-content class="auth-form">
 <ion-content *ngIf="!loggedIn" class="auth-form">
+  <ion-card>
+    <img src="../../assets/pantry.png" class="logo"/>
   <ion-grid>
     <ion-row>
-      <ion-col align-self-center>
-        <ion-button [routerLink]="['/registration']" expand="block" color="primary">Register</ion-button>
-
-        <span class="divider line one-line"></span>
-
-        <div class="already">Already a user?</div>
-
-        <ion-button [routerLink]="['/login']" expand="block" color="danger">Sign In</ion-button>
+      <ion-col width="50" style=text-align:center>
+        <ion-button  [routerLink]="['/registration']" size="default" color="primary" >Register</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="or dark-text">Or</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="already dark-text">Already a user?</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col width="50" style=text-align:center>
+        <ion-button [routerLink]="['/login']" size="default" color="secondary">Sign In</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-card>
 </ion-content>
 <ion-content *ngIf="loggedIn">
   <ion-grid>
@@ -32,7 +48,7 @@
       <div>
 
         <ion-col>
-          <ion-card [routerLink]="['/tabs/tab2']">
+          <ion-card [routerLink]="['/tabs/inventory']">
             <ion-card-header>
               <ion-card-title>Inventory</ion-card-title>
             </ion-card-header>
@@ -40,7 +56,7 @@
               The list of everything in your pantry.
             </ion-card-content>
           </ion-card>
-          <ion-card [routerLink]="['/tabs/tab1']">
+          <ion-card [routerLink]="['/tabs/recipe']">
             <ion-card-header>
               <ion-card-title>Recipes</ion-card-title>
             </ion-card-header>

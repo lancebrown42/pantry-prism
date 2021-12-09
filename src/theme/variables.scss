@@ -153,10 +153,10 @@
    */
 
   .ios body {
-    --ion-background-color: #000000;
+    --ion-background-color: #ffffff;
     --ion-background-color-rgb: 0,0,0;
 
-    --ion-text-color: #ffffff;
+    --ion-text-color: #000000;
     --ion-text-color-rgb: 255,255,255;
 
     --ion-color-step-50: #0d0d0d;
@@ -197,10 +197,10 @@
    */
 
   .md body {
-    --ion-background-color: #121212;
+    --ion-background-color: #ffffff;
     --ion-background-color-rgb: 18,18,18;
 
-    --ion-text-color: #ffffff;
+    --ion-text-color: black;
     --ion-text-color-rgb: 255,255,255;
 
     --ion-border-color: #222222;
@@ -216,7 +216,7 @@
     --ion-color-step-450: #7d7d7d;
     --ion-color-step-500: #898989;
     --ion-color-step-550: #949494;
-    --ion-color-step-600: #a0a0a0;
+    --ion-color-step-600: #ffffff;
     --ion-color-step-650: #acacac;
     --ion-color-step-700: #b8b8b8;
     --ion-color-step-750: #c4c4c4;
@@ -225,13 +225,13 @@
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
 
-    --ion-item-background: #1e1e1e;
+    --ion-item-background: #bcefff;
 
-    --ion-toolbar-background: #1f1f1f;
+    --ion-toolbar-background: #35d1ec;
 
-    --ion-tab-bar-background: #1f1f1f;
+    --ion-tab-bar-background: #35d1ec;
 
-    --ion-card-background: #1e1e1e;
+    --ion-card-background: #aaeffc;
   }
 }
 
@@ -242,3 +242,8 @@
 .already{
   text-align:center;
 }
+
+.or{
+  text-align:center;
+}
+

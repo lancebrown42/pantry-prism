@@ -13,8 +13,8 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
 
-.env
-env.json
+# .env
+# env.json
 /server/model/config.js
 *.log
 log.txt
