@@ -32,4 +32,10 @@ export class ItemCrudService {
   getAllUser(user: User): Observable<Item[]>{
     return this.http.get<Item[]>(this.baseUrl + 'userItems/' + user.intUserId);
   }
+  addGrocery(user: User, items: Item[]): Observable<any>{
+    return this.http.post(this.baseUrl + 'grocery/', {user, items});
+  }
+  getGrocery(user: User): Observable<Item[]>{
+    return this.http.get<Item[]>(this.baseUrl + 'grocery/' + user.intUserId);
+  }
 }

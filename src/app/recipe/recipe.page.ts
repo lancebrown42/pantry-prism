@@ -40,7 +40,6 @@ export class RecipePage implements OnInit {
 
   ngOnInit() {
     console.log('init');
-    this.populateInventory();
     const searchTerm$ = this.searchField.valueChanges.pipe(
       startWith(this.searchField),
       distinctUntilChanged(),
@@ -60,6 +59,7 @@ export class RecipePage implements OnInit {
 
   }
   async ionViewWillEnter(){
+    this.populateInventory();
     console.log('enter');
     this.inventory = [];
     this.user = JSON.parse(sessionStorage.getItem('user'));

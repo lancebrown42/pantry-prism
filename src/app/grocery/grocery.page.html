@@ -12,7 +12,7 @@
       <ion-title size="large">Grocery List</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-searchbar id="itemSearchbar" class="searchbar" placeholder="Search an item to add" debounce="1000" showCancelButton="focus" [formControl]="searchField" animated></ion-searchbar>
+  <ion-searchbar id="itemSearchbar" class="searchbar" placeholder="Search an item to add" showCancelButton="focus" [formControl]="searchField" (keyup.enter)="searchItems($event)" animated></ion-searchbar>
   <ion-list>
     <ion-item *ngFor="let item of items">
       <ion-label class="ion-text-capitalize">{{item.strDescription}}</ion-label>
@@ -24,11 +24,11 @@
       </div>
     </ion-item>
   </ion-list>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="save" (click)="close()"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 
   
 </ion-content>

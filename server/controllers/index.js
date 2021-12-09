@@ -1,5 +1,5 @@
 // const Item = require('../model/Item');
-const { User,Item,Recipe } = require('../models');
+const { User,Item,Recipe,Grocery } = require('../models');
 const http = require('http');
 var request = require('request');
 const env = require('../env.json');
@@ -29,6 +29,40 @@ const createUser = async (req, res) => {
     }
 }
 const getUserById = async(req, res)=>{
+    try{
+        const user = await User.findByPk(req.params.id);
+        return res.status(200).json(user)
+    }
+    catch(error){
+        return res.status(500).json({ error: error.message })
+    }
+}
+const createGrocery = async (req, res) => {
+    console.log('req.body')
+    console.log(req.body)
+    try {
+        console.log(req.body)
+        var body = JSON.stringify(req.body);
+
+            users = JSON.parse(body).user;
+            items = JSON.parse(body).items
+            console.log(items)
+            const usr =await User.findByPk(users.intUserId);
+            console.log(usr)
+
+            
+            for(itm of items){
+                itm = await Item.create(itm);
+                groc = await usr.addGrocery()
+                console.log("adding ", itm, " to user ", usr.strFirstName)
+                addedItems.push(await usr.addItems(itm))
+            };
+        return res.status(201).json(addedItems,);
+    } catch (error) {
+        return res.status(500).json({ error: error.message, "stack" : error.stack })
+    }
+}
+const getGrocery = async(req, res)=>{
     try{
         const user = await User.findByPk(req.params.id);
         return res.status(200).json(user)
@@ -499,6 +533,8 @@ module.exports = {
     getItemByID,
     getRandomRecipes,
     getProductSuggestion,
+    createGrocery,
+    getGrocery,
 
 
 }

@@ -2,11 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { combineLatest, Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { debounceTime, map, startWith } from 'rxjs/operators';
 import { Item } from 'src/app/models/item.model';
 import { PopoverController } from '@ionic/angular';
 import { SpoonacularService } from '../services/spoonacular.service';
 import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autocomplete-popover.component';
+import { ItemCrudService } from '../services/item-crud.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-grocery',
@@ -15,6 +17,7 @@ import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autoc
 })
 export class GroceryPage implements OnInit{
   @Input() name: string;
+  user: User = JSON.parse(sessionStorage.getItem('user'));
   items: Item[];
   public searchField: FormControl;
   public itemList$: Observable<Item[]>;
@@ -24,17 +27,20 @@ export class GroceryPage implements OnInit{
     public popoverController: PopoverController,
     private modalCtr: ModalController,
     private spoonApi: SpoonacularService,
+    private itemCtrl: ItemCrudService,
   ) {
     this.searchField = new FormControl('');
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.items = [];
     const searchTerm$ = this.searchField.valueChanges.pipe(
+      debounceTime(500),
       startWith(this.searchField)
     );
-    this.items = [];
+    this.itemList$ = this.itemCtrl.getGrocery(this.user);
+
     // this.items.push(new Item());
-    const itemList$ = new Observable<Item[]>();
     this.searchField.valueChanges.subscribe(async search=>{
       console.log(search);
       // this.itemList$ = this.spoonApi.getItemSuggestion(search, 5);
@@ -45,12 +51,17 @@ export class GroceryPage implements OnInit{
       }
       this.presentPopover(searchTerm$);
     });
-  }
 
-  async close() {
-    // const closeModal = 'Modal Closed';
-    console.log(this.searchField.value);
-    await this.modalCtr.dismiss(this.items);
+  }
+  async searchItems(ev: KeyboardEvent){
+    // console.log(ev);
+    const box: HTMLTextAreaElement = ev.target as HTMLTextAreaElement;
+    // console.log(typeof(ev));
+    console.log(box.value);
+    const createItem = new Item();
+    createItem.strDescription = box.value;
+    createItem.intQuantity = 1;
+    const manual = this.itemCtrl.addGrocery(this.user, [createItem]).subscribe((ret)=>this.items.push(ret));
   }
   async presentPopover(ev: any) {
     this.popover = await this.popoverController.create({

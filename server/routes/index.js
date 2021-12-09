@@ -41,7 +41,9 @@ router.get('/recipes/random/:numberOfResults/:tags?', controllers.getRandomRecip
 
 router.post('/health', controllers.healthPost);
 // router.get('/recipes/random/', controllers.getRandomRecipes);
+router.get('/grocery/:intUserId', controllers.healthPost);
 
+router.post('/grocery', controllers.healthPost);
 
 
 
