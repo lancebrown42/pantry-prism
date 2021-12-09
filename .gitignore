@@ -15,7 +15,7 @@ $RECYCLE.BIN/
 
 # .env
 # env.json
-/server/model/config.js
+# /server/model/config.js
 *.log
 log.txt
 npm-debug.log*
