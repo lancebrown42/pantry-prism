@@ -257,6 +257,46 @@ const getItemSuggestion= async(req, res)=>{
         return res.status(500).json({error: error.message})
     }
 }
+const getProductSuggestion= async(req, res)=>{
+    try {
+        var items = [];
+        const options = {
+            method: 'GET',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/products/search',
+            qs: {query: req.params.name, number: req.params.numberOfResults},
+            headers: {
+              'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+              'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419',
+              useQueryString: true
+            }
+          };
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            var obj = JSON.parse(response.body).products
+            console.log(obj);
+            for(spoonItem of obj){
+                console.log("spoonItem:")
+                console.log(spoonItem);
+                var i = {
+                    spoonacularId: spoonItem.id,
+                    strDescription: spoonItem.title,
+                    strImage: spoonItem.image
+                }
+                console.log("pushed item:")
+                items.push(i);
+                console.log(i)
+            }
+            console.log("response bodt");
+            console.log(response.body);
+            console.log("items array:");
+            console.log(items);
+            return res.status(200).json(items);
+            
+          });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
 const getRandomRecipes = async(req, res)=>{
     try {
         const tags = req.params.tags ? req.params.tags.replaceAll('%2C', ',') : '';
@@ -458,6 +498,7 @@ module.exports = {
     addItemBatch,
     getItemByID,
     getRandomRecipes,
+    getProductSuggestion,
 
 
 }

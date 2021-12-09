@@ -29,6 +29,10 @@ export class SpoonacularService {
     return this.http.get<Item[]>(this.baseUrl + 'getItemSuggest/' + name + '/' + (numResults ? numResults : 1));
 
   }
+  getProductSuggestion(name: string, numResults?: number): Observable<Item[]>{
+    return this.http.get<Item[]>(this.baseUrl + 'getProductSuggest/' + name + '/' + (numResults ? numResults : 1));
+
+  }
   getItemByID(id: number): Observable<Item>{
     return this.http.get<Item>(this.baseUrl + 'getItemId/' + id);
 

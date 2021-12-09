@@ -1,82 +1,85 @@
-
-
 <ion-header>
   <ion-toolbar class="toolbar">
     <ion-title>
       Pantry Prism
     </ion-title>
-    <ion-buttons *ngIf="loggedIn">
+    <ion-buttons *ngIf="loggedIn" slot="end">
       <ion-button color="danger" (click)="logout()">
-        LOGOUT
+        <ion-icon name="log-out-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content class="auth-form">
-<ion-content *ngIf="!loggedIn" class="auth-form">
-  <ion-card>
-    <img src="../../assets/pantry.png" class="logo"/>
-  <ion-grid>
-    <ion-row>
-      <ion-col width="50" style=text-align:center>
-        <ion-button  [routerLink]="['/registration']" size="default" color="primary" >Register</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div class="or dark-text">Or</div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div class="already dark-text">Already a user?</div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col width="50" style=text-align:center>
-        <ion-button [routerLink]="['/login']" size="default" color="secondary">Sign In</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-card>
-</ion-content>
-<ion-content *ngIf="loggedIn">
-  <ion-grid>
-    <ion-row>
-      <div>
 
-        <ion-col>
-          <ion-card [routerLink]="['/tabs/inventory']">
-            <ion-card-header>
-              <ion-card-title>Inventory</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              The list of everything in your pantry.
-            </ion-card-content>
-          </ion-card>
-          <ion-card [routerLink]="['/tabs/recipe']">
-            <ion-card-header>
-              <ion-card-title>Recipes</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              Cook the food from your pantry
-            </ion-card-content>
-          </ion-card>
-          <ion-card [routerLink]="['/tabs/tab3']">
-            <ion-card-header>
-              <ion-card-title>Grocery</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              Restock your pantry
-            </ion-card-content>
-          </ion-card>
-          
-        </ion-col>
-      </div>
-    </ion-row>
-  </ion-grid>
+  <ion-content *ngIf="!loggedIn" class="auth-form">
+    <ion-card>
+      <img src="../../assets/pantry.png" class="logo" />
+      <ion-grid>
+        <ion-row>
+          <ion-col width="50" style=text-align:center>
+            <ion-button [routerLink]="['/registration']" size="default" color="primary">Register</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="or dark-text">Or</div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="already dark-text">Already a user?</div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width="50" style=text-align:center>
+            <ion-button [routerLink]="['/login']" size="default" color="secondary">Sign In</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-content>
+  <ion-content *ngIf="loggedIn">
+    <ion-card>
+      <ion-card-title>
+        Welcome back, {{user.strFirstName}}!
+      </ion-card-title>
+    </ion-card>
+    <ion-grid>
+      <ion-row>
+        <div>
+
+          <ion-col>
+            <ion-card [routerLink]="['/tabs/inventory']">
+              <ion-card-header>
+                <ion-card-title>Inventory</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                The list of everything in your pantry.
+              </ion-card-content>
+            </ion-card>
+            <ion-card [routerLink]="['/tabs/recipe']">
+              <ion-card-header>
+                <ion-card-title>Recipes</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                Cook the food from your pantry
+              </ion-card-content>
+            </ion-card>
+            <ion-card [routerLink]="['/tabs/grocery']">
+              <ion-card-header>
+                <ion-card-title>Grocery</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                Restock your pantry
+              </ion-card-content>
+            </ion-card>
+
+          </ion-col>
+        </div>
+      </ion-row>
+    </ion-grid>
 
 
-</ion-content>
+  </ion-content>

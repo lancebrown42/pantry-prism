@@ -40,7 +40,24 @@ export class AutocompletePopoverComponent implements OnInit {
         }
         console.log(this.results);
       });
-    } else if(this.state === 'recipe'){
+    }
+    else if(this.state === 'grocery'){
+
+      for(let i=0; i<this.maxRes; i++){
+        this.maxResArr.push(i);
+      }
+      console.log(this.search);
+      this.results$ = this.spoonApi.getProductSuggestion(this.search, this.maxRes);
+      // this.results$=this.itemCtrl.getAll();
+      const handler=this.results$.subscribe(results=>{
+        for(const res of results.values()){
+          this.results.push(res);
+          // console.log(res.strDescription);
+        }
+        console.log(this.results);
+      });
+    }
+     else if(this.state === 'recipe'){
       for(let i=0; i<this.maxRes; i++){
         this.maxResArr.push(i);
       }

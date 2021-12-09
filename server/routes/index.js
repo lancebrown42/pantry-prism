@@ -28,6 +28,8 @@ router.get('/recipes/autocomplete/:name/:numberOfResults?', controllers.getRecip
 
 router.get('/getItemSuggest/:name/:numberOfResults?/:intolerances?', controllers.getItemSuggestion);
 
+router.get('/getProductSuggest/:name/:numberOfResults?/:intolerances?', controllers.getProductSuggestion);
+
 router.get('/getItemId/:id', controllers.getItemByID);
 
 // router.post('/addItemBatch', (req, res)=>{console.log(req);return res.status(418)});

@@ -63,7 +63,7 @@ export class LoginPage implements OnInit {
         };
       }
       sessionStorage.setItem('user', JSON.stringify(this.user));
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/tabs/home');
     },
     err=>{
       console.log(err);
