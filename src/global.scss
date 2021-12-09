@@ -28,21 +28,18 @@
 
 .toolbar{
     text-align:center;
-    font-family:cursive;
+    // font-family:cursive;
+    
     
   }
   .searchbar{
     position: relative;
 }
-  .searchbarAutocomplete .popover-content{
-    // position: sticky;
-    transform: translate(-275%, -50%);
-    // top: 0;
-    // left: 0;
+ion-searchbar {
+  .searchbar-input-container .searchbar-input{
+    // background-color: fuchsia;
+    color: rgb(43, 46, 43);
+    
+  }
 
-    // {style: {
-    //   position: 'sticky',
-    //   screenTop: '0',
-    //   screenLeft:'0'
-    // }}
 }
