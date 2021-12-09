@@ -15,6 +15,7 @@ import { AlertController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { ItemAddPage } from '../modal/item-add/item-add.page';
 import { User } from '../models/user.model';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 // import * as PantryJSON from '../../../db/items.json';
 
@@ -31,9 +32,10 @@ export class inventoryPage {
   isCordova: boolean;
   inventory: Item[] = [];
   source: JSON ;
+  // quantityControl: FormGroup;
   constructor(public photoService: PhotoService, public scannerService: ScannerService,
     public itemService: ItemCrudService, private plat: Platform, public spoon: SpoonacularService,
-    public alertController: AlertController, public modalCtrl: ModalController) {
+    public alertController: AlertController, public modalCtrl: ModalController, fb: FormBuilder) {
       //check for cordova for scanner
       this.isCordova = plat.is('cordova');
      }
@@ -67,9 +69,18 @@ export class inventoryPage {
       if (modalDataResponse !== null) {
         this.modalDataResponse = modalDataResponse.data;
         console.log('Modal Sent Data : '+ modalDataResponse.data);
+        console.log(modalDataResponse.data);
       }
-    }).then(async ()=>{
-      const itemCreate = await this.itemService.addBatch(this.modalDataResponse);
+      return modalDataResponse.data;
+    }).then(async (data)=>{
+      console.log('data');
+      console.log(data);
+      const itemCreate = this.itemService.addBatch(data, this.user).subscribe((added: Item[]) => {
+        for (let itm of added) {
+          this.inventory.push(itm);
+          console.log('added ', itm, ' to ', this.user);
+        }
+      });
       console.log('Item service returned', itemCreate);
     });
 
@@ -77,6 +88,7 @@ export class inventoryPage {
   }
 
   populateInventory(){
+    this.inventory = [];
     if(this.user){
 
       this.itemService.getAllUser(this.user)

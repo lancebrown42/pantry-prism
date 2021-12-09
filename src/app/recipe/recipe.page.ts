@@ -2,11 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { combineLatest, Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 import { Recipe } from 'src/app/models/recipe.model';
 import { PopoverController } from '@ionic/angular';
 import { SpoonacularService } from '../services/spoonacular.service';
 import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autocomplete-popover.component';
+import { ItemCrudService } from '../services/item-crud.service';
+import { User } from '../models/user.model';
+import { Item } from '../models/item.model';
 
 
 
@@ -18,27 +21,31 @@ import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autoc
 })
 export class RecipePage implements OnInit {
   @Input() name: string;
-  recipes: Recipe[];
+  recipes: Recipe[] = [];
+  user: User;
   public searchField: FormControl;
   public recipeList$: Observable<Recipe[]>;
   popOpen: boolean;
+  source: JSON ;
+  inventory: Item[] = [];
   popover: HTMLIonPopoverElement;
   constructor(
     public popoverController: PopoverController,
     private modalCtr: ModalController,
     private spoonApi: SpoonacularService,
+    public itemService: ItemCrudService,
   ) {
     this.searchField = new FormControl('');
   }
 
   ngOnInit() {
+    console.log('init');
+    this.populateInventory();
     const searchTerm$ = this.searchField.valueChanges.pipe(
-      startWith(this.searchField)
+      startWith(this.searchField),
+      distinctUntilChanged(),
     );
-    this.recipes = [];
-    // this.recipes.push(new Recipe());
-    const recipeList$ = new Observable<Recipe[]>();
-    this.searchField.valueChanges.subscribe(async search=>{
+    searchTerm$.subscribe(async search=>{
       console.log(search);
       // this.recipeList$ = this.spoonApi.getRecipeSuggestion(search, 5);
       if(this.popover){
@@ -46,20 +53,95 @@ export class RecipePage implements OnInit {
         await this.popover.dismiss();
         // await this.popover.onDidDismiss();
       }
-      this.presentPopover(searchTerm$);
+      this.presentPopover(await searchTerm$);
     });
-    // this.recipeList$ = combineLatest([recipeList$, searchTerm$]).pipe(
-    //   map(([recipeList, searchTerm])=>
-    //   recipeList.filter(
-    //     (recipe)=>
-    //       searchTerm === '' ||
-    //       recipe.strDescription.toLowerCase().includes(searchTerm.toLowerCase())
-    //   ))
-    // );
-  }
+    // this.recipes.push(new Recipe());
+    const recipeList$ = new Observable<Recipe[]>();
 
+  }
+  async ionViewWillEnter(){
+    console.log('enter');
+    this.inventory = [];
+    this.user = JSON.parse(sessionStorage.getItem('user'));
+    console.log('this.inventory');
+    console.log(this.inventory);
+
+  }
+  async populateInventory(){
+    console.log('enter popInv');
+    if(this.user){
+      console.log('user: ');
+      console.log(this.user);
+      await this.itemService.getAllUser(this.user)
+      .subscribe(
+        data=>{
+          this.source = JSON.parse(JSON.stringify(data));
+          console.log(this.source);
+          const items = JSON.parse(JSON.stringify(this.source)).Items;
+          for(const item of items){
+            console.log(item);
+            // console.log('item');
+            // console.log(item);
+            const it = item;
+            // console.log('it');
+            // console.log(it);
+            this.inventory.push(it);
+          }
+          console.log('leaving popinv user');
+        }
+        );
+        await this.populateRecipes('populateInventoryUser');
+      }else{
+        console.log('nouser');
+
+        this.itemService.getAll()
+        .subscribe(
+          data=>{
+            this.source = JSON.parse(JSON.stringify(data));
+            // console.log(this.source);
+            for(const item of JSON.parse(JSON.stringify(this.source))){
+              // console.log(item);
+              // console.log('item');
+              // console.log(item);
+              const it = item;
+              // console.log('it');
+              // console.log(it);
+              this.inventory.push(it);
+            }
+            console.log('leaving popinv nouser');
+
+          }
+          );
+          await this.randomRecipes();
+        }
+  }
+  async populateRecipes(caller: string){
+    console.log('populate recipe caller: ', caller);
+    this.spoonApi.getRecipeByIngredients(this.inventory).subscribe((rec)=>{
+      console.log('rec');
+      console.log(rec);
+      const re = rec.recipe;
+      for(const r of rec){
+        console.log('r');
+        console.log(r);
+        this.recipes.push(r.recipe);
+      }
+      });
+  }
+  async randomRecipes(){
+    this.spoonApi.getRecipeRandom().subscribe((rec)=>{
+      console.log('rec');
+      console.log(rec);
+      const re = rec;
+      for(const r of rec){
+        console.log('r');
+        console.log(r);
+        this.recipes.push(r);
+      }
+      });
+  }
   async close() {
-    // const closeModal = 'Modal Closed';
+
     console.log(this.searchField.value);
     await this.modalCtr.dismiss(this.recipes);
   }
@@ -74,132 +156,19 @@ export class RecipePage implements OnInit {
       keyboardClose: false,
       componentProps: {search: this.searchField.value, source: 'recipe'},
     });
-    this.popOpen = true;
-    await this.popover.present();
-    const { role, data } = await this.popover.onDidDismiss();
-    this.popOpen = false;
-    console.log('onDidDismiss resolved with role', role, '\n returning data', data);
-    if(data){
-      this.recipes.push(data);
-      this.searchField.setValue(null);
+    if(this.searchField.value){
+
+      this.popOpen = true;
+      await this.popover.present();
+      const { role, data } = await this.popover.onDidDismiss();
+      this.popOpen = false;
+      console.log('onDidDismiss resolved with role', role, '\n returning data', data);
+      if(data){
+        this.recipes.push(data);
+        this.searchField.setValue(null);
+      }
     }
   }
 
-//   recipeAutoComplete: FormControl[] = [new FormControl()];
-//   recipeAutoComplete$: Observable<RecipeAutocomplete[]>;
-//   loading = false;
-//   searchInput: RecipeAutocomplete;
-//   spinnerColor: ThemePalette = 'primary';
-//   isInitial = true;
-//   recipe$: Observable<RecipeInfo> = this.store.recipeInfoObs;
-//   recipes: any[] = [{id: 1, title: 'test'}];
-
-//   /******
-//    * test stuff
-//    */
-//    searchMoviesCtrl = new FormControl();
-//    filteredMovies: any;
-//    isLoading = false;
-//    errorMsg: string;
-//    /****/
-
-//   constructor(
-//     private recipeService: RecipeService,
-//     private store: StoreService,
-//     private http: HttpClient
-//   ) {}
-
-//   ngOnInit(): void {
-//     this.onRecipeAutoCompleteValueChange();
-
-
-//     this.searchMoviesCtrl.valueChanges
-//          .pipe(
-//             debounceTime(500),
-//             tap(() => {
-//                this.errorMsg = '';
-//                this.filteredMovies = [];
-//                this.isLoading = true;
-//             }),
-//             switchMap(value => this.http.get('http://www.omdbapi.com/?apikey=[YOUR_KEY_HERE]=' + value)
-//                .pipe(
-//                   finalize(() => {
-//                      this.isLoading = false;
-//                   }),
-//                )
-//             )
-//          )
-//          .subscribe(data => {
-//             if (data['Search'] == undefined) {
-//                this.errorMsg = data['Error'];
-//                this.filteredMovies = [];
-//             } else {
-//                this.errorMsg = '';
-//                this.filteredMovies = data['Search'];
-//             }
-
-//             console.log(this.filteredMovies);
-//          });
-//   }
-
-//   recipeDisplayValue(recipe: RecipeAutocomplete): string {
-//     return recipe && recipe.title;
-//   }
-//   showIngredients(ingredients: Ingredient[]): string {
-//     return ingredients.reduce(
-//       (prev, curr) => `${prev ? prev + ', ' : ''}${curr.name}`,
-//       ''
-//     );
-//   }
-//   onRecipeSelect(selectedEvent: MatAutocompleteSelectedEvent): void {
-//     const selectedRecipe: RecipeAutocomplete = selectedEvent.option.value;
-//     this.isInitial = false;
-//     this.getRecipeInfo(selectedRecipe.id);
-//   }
-// // eslint-disable-next-line @typescript-eslint/member-delimiter-style
-// searchBoxRecipes(event?: {component: IonicSelectableComponent,text: string}) {
-//     const text = event.text.trim().toLowerCase();
-//     event.component.startSearch();
-//     if(!text){
-//       return;
-//     }
-//     this.recipeAutoComplete$ = this.recipeService.getRecipeAutoComplete(text);
-//     this.recipeAutoComplete$.subscribe((recipe)=>{event.component.recipes.push(recipe);});
-//     event.component.endSearch();
-// }
-//   private onRecipeAutoCompleteValueChange(): void {
-//     // this.recipeAutoComplete$ = this.searchRecipes(this.searchInput.title).pipe(finalize(() => (this.loading = false)));
-//   }
-
-
-//   private searchRecipes(query: string): Observable<RecipeAutocomplete[]> {
-//           return this.recipeService.getRecipeAutoComplete(query);
-//     }
-
-
-//   private getRecipeInfo(recipeId: number): void {
-//     this.recipeService
-//       .getRecipeInfo(recipeId)
-//       .subscribe((recipeInfo) => this.store.updateRecipeInfo(recipeInfo));
-//   }
-
-
-  // private onViewPortChange(): void {
-  //   this.breakPointObserver
-  //     .observe([Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
-  //     .subscribe((result) => {
-  //       if (result.breakpoints[Breakpoints.Large]) {
-  //         this.searchBarRecipesAlignment = searchBarAlignmentPosition.row;
-  //       }
-
-  //       if (result.breakpoints[Breakpoints.Medium]) {
-  //         this.searchBarRecipesAlignment = searchBarAlignmentPosition.column;
-  //       }
-
-  //       if (result.breakpoints[Breakpoints.Small]) {
-  //         this.searchBarRecipesAlignment = searchBarAlignmentPosition.column;
-  //       }
-  //     });
-  // }
 
 }

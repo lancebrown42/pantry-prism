@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,8 +21,13 @@ export class ItemCrudService {
   getAll(): Observable<Item[]>{
     return this.http.get<Item[]>(this.baseUrl + 'items');
   }
-  addBatch(items: Item[]): Observable<any>{
-    return this.http.post(this.baseUrl + 'addItemBatch',items);
+  addBatch(items: Item[], user: User): Observable<any>{
+    console.log(items);
+    console.log(user);
+    const bdy = {user, items};
+    console.log(bdy);
+    // console.log(this.http.post(this.baseUrl + 'health', body).subscribe());
+    return this.http.post(this.baseUrl + 'addItemBatch', bdy);
   }
   getAllUser(user: User): Observable<Item[]>{
     return this.http.get<Item[]>(this.baseUrl + 'userItems/' + user.intUserId);

@@ -1,4 +1,5 @@
 var express = require('express');
+const { retryWhen } = require('rxjs');
 var router = express.Router();
 const controllers = require('../controllers');
 
@@ -29,9 +30,15 @@ router.get('/getItemSuggest/:name/:numberOfResults?/:intolerances?', controllers
 
 router.get('/getItemId/:id', controllers.getItemByID);
 
+// router.post('/addItemBatch', (req, res)=>{console.log(req);return res.status(418)});
 router.post('/addItemBatch', controllers.addItemBatch);
 
 router.post('/getRecipeByIngredients', controllers.getRecipeIngredients);
+
+router.get('/recipes/random/:numberOfResults/:tags?', controllers.getRandomRecipes);
+
+router.post('/health', controllers.healthPost);
+// router.get('/recipes/random/', controllers.getRandomRecipes);
 
 
 

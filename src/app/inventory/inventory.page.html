@@ -12,23 +12,35 @@
       <ion-title size="large">Inventory</ion-title>
     </ion-toolbar>
   </ion-header>
+  
   <ion-list>
-    <ion-card>
-      
-      
-    </ion-card>
     <div *ngFor="let item of inventory">
-      
+      <!-- <ion-grid> -->
       <ion-item>
-        <ion-avatar slot="start">
-          <img src="{{item.strImage}}">
-        </ion-avatar>
-        <ion-label>
-          <h2>{{item.strDescription}}</h2>
-          <h3>On hand: {{item.intQuantity}}</h3>
-        </ion-label>
-        
+        <!-- <ion-row class="ion-justify-content-between"> -->
+          <!-- <ion-col> -->
+
+            <ion-avatar slot="start">
+              <img src="{{item.strImage}}">
+            </ion-avatar>
+            <ion-label>
+              <h2>{{item.strDescription}}</h2>
+              <!-- <h3>On hand: {{item.intQuantity}}</h3> -->
+            </ion-label>
+          <!-- </ion-col>
+          <ion-col class="ion-nowrap" size="3"> -->
+
+            <div class="quantity ion-nowrap ion-text-right">
+              
+              <ion-button class="decrement" #decrement (click)="item.intQuantity = item.intQuantity-1"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+              <ion-input class="qtyCounter" #qty type="number" [ngModel]="item.intQuantity"></ion-input>
+              <ion-button class="increment" #increment (click)="item.intQuantity = item.intQuantity+1"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+            </div>
+          <!-- </ion-col> -->
+          
+        <!-- </ion-row> -->
       </ion-item>
+      <!-- </ion-grid> -->
     </div>
   </ion-list>
 <!-- item addition button -->

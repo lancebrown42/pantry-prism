@@ -41,6 +41,11 @@ export class SpoonacularService {
   }
 
   getRecipeAutocomplete(query: string, numResults?: number): Observable<Recipe[]>{
-    return this.http.get<Recipe[]>(this.baseUrl + '/recipes/autocomplete/' + query + '/' + (numResults ? numResults : 1));
+    return this.http.get<Recipe[]>(this.baseUrl + 'recipes/autocomplete/' + query + '/' + (numResults ?? 1));
+  }
+
+  getRecipeRandom(tags?: string, numResults?: number): Observable<Recipe[]>{
+    return this.http.get<Recipe[]>(this.baseUrl + 'recipes/random/' + (numResults ?? '5') + '/' + (tags ?? ''));
+
   }
 }
