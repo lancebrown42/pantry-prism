@@ -10,13 +10,19 @@
     <ion-searchbar id="recipeSearchbar" class="searchbar" placeholder="Search a recipe" debounce="1000" showCancelButton="focus" [formControl]="searchField" animated></ion-searchbar>
     <ion-list *ngIf="recipes">
       <!-- <h1>{{recipes.length}}</h1> -->
-      <ion-item *ngFor="let recipe of recipes">
-        <ion-card button="true">
+      <ion-item *ngFor="let recipe of recipes; let i=index" [attr.data-index]="i">
+        <ion-card #recipeCard button="true" (click)="expandRecipe($event, recipe, i)">
           <img src="{{recipe.jsonRecipeData.image}}">
           <ion-card-header>
             <ion-card-title>{{recipe.strTitle}}</ion-card-title>
+            <!-- <ion-card-subtitle>{{recipe.jsonRecipeData.image}}</ion-card-subtitle> -->
           </ion-card-header>
+          <ion-card-content *ngIf="show.includes(i)">
+            <div [innerHtml]="recipe.jsonRecipeData.instructions"></div>
+          </ion-card-content>
         </ion-card>
+        
+        
         <!-- <ion-label *ngIf="recipe.strTitle" class="ion-text-capitalize">{{recipe.strTitle}}</ion-label>
         <ion-label *ngIf="recipe.title" class="ion-text-capitalize">{{recipe.title}}</ion-label> -->
       </ion-item>

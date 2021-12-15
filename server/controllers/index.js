@@ -331,6 +331,28 @@ const getProductSuggestion= async(req, res)=>{
         return res.status(500).json({error: error.message})
     }
 }
+const getRecipeId = async(req, res)=>{
+    try {
+        const options = {
+            method: 'GET',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/'+ req.params.id + '/information',
+            headers: {
+              'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+              'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419',
+              useQueryString: true
+            }
+          };
+          
+          request(options, function (error, response, body) {
+              if (error) throw new Error(error);
+              var rec = Recipe.build({ intSpoonacularId: body.id, strTitle: body.title, jsonRecipeData: JSON.parse(body)})
+
+              return res.status(200).json(rec);
+          });
+    } catch (error) {
+        return res.status(500).json({ error: error.message })``
+    }
+}
 const getRandomRecipes = async(req, res)=>{
     try {
         const tags = req.params.tags ? req.params.tags.replaceAll('%2C', ',') : '';
@@ -363,26 +385,31 @@ const getRandomRecipes = async(req, res)=>{
     }
 }
 const getRecipeIngredients = async (req, res) =>{
+    console.log("ENTER RECINGRED");
     try {
-        var body = JSON.parse(JSON.stringify(req.body));
+        var body = JSON.parse(JSON.stringify(req.body))
+        console.log("BODY");
         console.log(body);
         
         var ingredients = body.ingredients;
+        console.log("INGREDIENTS")
+        console.log(ingredients);
         var ingredientsString = "";
         var recipes = [];
         var num = body.num ? Number(body.num) : 1;
         var ignore = body.ignore ? Boolean(body.ignore) : false;
         var ranking = body.ranking ? Number(body.ranking) : 2;
         for(ing of ingredients){
-            console.log(ing.strDescription);
-            // console.log("len", ingredientsString.length)
+            // console.log(ing.strDescription);
+            //// console.log("len", ingredientsString.length)
             if(ingredientsString.length > 0){
                 console.log("if", ing)
-                ingredientsString =  ingredientsString.concat(',+',ing.strDescription);
+                ing.strDescription = encodeURIComponent(ing.strDescription)
+                ingredientsString =  ingredientsString.concat(',',ing.strDescription);
             }
             else{
                 console.log("else", ing)
-                ingredientsString = ing.strDescription;
+                ingredientsString = encodeURIComponent(ing.strDescription);
             }
             // ingredientsString.concat(ing.strDescription)
             // console.log("loopstr ", ingredientsString);
@@ -410,19 +437,22 @@ const getRecipeIngredients = async (req, res) =>{
           
           request(options, function (error, response, body) {
               if (error) throw new Error(error);
-                      var obj = JSON.parse(JSON.stringify(body)) //for testing with live data
+              console.log("spoon body");
+              console.log(body)
+                      var obj = JSON.parse(body) //for testing with live data
                     //   var obj = JSON.parse(JSON.stringify(test)) //for testing without live data -- remember to comment out api key if using this
                       var ret = [];
                       for(fullrecipe of obj){
-                          console.log("fullrecipe");
-                          console.log(fullrecipe);
-                          var rec = Recipe.build({intSpoonacularId: fullrecipe.id})
-                          console.log("rec");
-                          console.log(rec);
+                        //   console.log("fullrecipe");
+                        //   console.log(fullrecipe);
+                          var rec = Recipe.build({intSpoonacularId: fullrecipe.id, strTitle: fullrecipe.title, strImage: fullrecipe.image, jsonRecipeData: fullrecipe})
+                        //   console.log("rec");
+                        //   console.log(rec);
                           var usedIng = fullrecipe.usedIngredients
                           var missedIng = fullrecipe.missedIngredients
                           ret.push({"recipe": rec,"usedIngredients": usedIng,"missedIngredients": missedIng});
                       }
+                    //   console.log(ret);
                       return res.status(200).json(ret);
           });
 
@@ -535,6 +565,7 @@ module.exports = {
     getProductSuggestion,
     createGrocery,
     getGrocery,
+    getRecipeId,
 
 
 }

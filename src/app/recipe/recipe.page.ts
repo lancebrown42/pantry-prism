@@ -10,6 +10,7 @@ import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autoc
 import { ItemCrudService } from '../services/item-crud.service';
 import { User } from '../models/user.model';
 import { Item } from '../models/item.model';
+import { RecipeInfo } from '../models/recipe-info.model';
 
 
 
@@ -29,6 +30,8 @@ export class RecipePage implements OnInit {
   source: JSON ;
   inventory: Item[] = [];
   popover: HTMLIonPopoverElement;
+  recipePopulated = false;
+  show: number[]=[];
   constructor(
     public popoverController: PopoverController,
     private modalCtr: ModalController,
@@ -88,9 +91,11 @@ export class RecipePage implements OnInit {
             this.inventory.push(it);
           }
           console.log('leaving popinv user');
+          if(!this.recipePopulated){
+            this.populateRecipes('populateInventoryUser');
+          }
         }
         );
-        await this.populateRecipes('populateInventoryUser');
       }else{
         console.log('nouser');
 
@@ -112,7 +117,7 @@ export class RecipePage implements OnInit {
 
           }
           );
-          await this.randomRecipes();
+          // await this.randomRecipes();
         }
   }
   async populateRecipes(caller: string){
@@ -120,11 +125,13 @@ export class RecipePage implements OnInit {
     this.spoonApi.getRecipeByIngredients(this.inventory).subscribe((rec)=>{
       console.log('rec');
       console.log(rec);
+      this.recipes = [];
       const re = rec.recipe;
       for(const r of rec){
         console.log('r');
         console.log(r);
         this.recipes.push(r.recipe);
+        this.recipePopulated = true;
       }
       });
   }
@@ -168,6 +175,25 @@ export class RecipePage implements OnInit {
         this.searchField.setValue(null);
       }
     }
+  }
+  async expandRecipe(ev: any, recipe: Recipe, index: number){
+    let details: RecipeInfo = recipe.jsonRecipeData;
+    // console.log(ev.currentTarget);
+    console.log(recipe);
+    // console.log(index);
+    // console.log(details);
+    this.spoonApi.getRecipeByID(recipe.intSpoonacularId).subscribe((rec)=>{
+      console.log(rec);
+      details = rec.jsonRecipeData;
+      // const image = recipe.jsonRecipeData.image;
+      // recipe.jsonRecipeData = null;
+      recipe.jsonRecipeData = JSON.parse(JSON.stringify(details));
+      console.log(recipe);
+      this.show.push(index);
+      // console.log(recipe.jsonRecipeData.image);
+      // recipe.jsonRecipeData.image = image;
+
+    });
   }
 
 

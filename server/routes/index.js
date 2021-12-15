@@ -45,7 +45,7 @@ router.get('/grocery/:intUserId', controllers.healthPost);
 
 router.post('/grocery', controllers.healthPost);
 
-
+router.get('/recipe/:id', controllers.getRecipeId);
 
 
 module.exports = router;
