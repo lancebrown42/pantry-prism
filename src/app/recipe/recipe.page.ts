@@ -117,7 +117,7 @@ export class RecipePage implements OnInit {
 
           }
           );
-          // await this.randomRecipes();
+          await this.randomRecipes();
         }
   }
   async populateRecipes(caller: string){

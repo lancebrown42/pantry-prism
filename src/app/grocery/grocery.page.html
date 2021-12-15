@@ -16,7 +16,7 @@
   <ion-list>
     <ion-item *ngFor="let item of items">
       <ion-label class="ion-text-capitalize">{{item.strDescription}}</ion-label>
-      <div class="quantity ion-nowrap ion-text-right">
+      <div class="quantity ion-nowrap ion-text-right" slot="end">
               
         <ion-button class="decrement" #decrement (click)="item.intQuantity = item.intQuantity-1"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
         <ion-input class="qtyCounter" #qty type="number" [ngModel]="item.intQuantity"></ion-input>

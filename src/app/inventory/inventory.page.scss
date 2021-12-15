@@ -1,3 +1,17 @@
 .popover-backdrop {
     display:none;
   }
+  .quantity>ion-input{
+    width: 2em;
+    text-align: center;
+  }
+.quantity{
+  display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row; 
+    flex-direction: row;
+    text-align: end;
+}
+// .quantity>button{
+//   align-self: end;
+// }
