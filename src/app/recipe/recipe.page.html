@@ -13,14 +13,15 @@
       <ion-item *ngFor="let recipe of recipes; let i=index" [attr.data-index]="i">
         <ion-card #recipeCard button="true" (click)="expandRecipe($event, recipe, i)">
           <img src="{{recipe.jsonRecipeData.image}}">
-          <ion-card-header>
-            <ion-card-title>{{recipe.strTitle}}</ion-card-title>
+          <ion-card-header [ngSwitch]="show.includes(i)">
+            <ion-card-title *ngSwitchCase="true"><a href="{{recipe.jsonRecipeData.sourceUrl}}" target="_blank"> {{recipe.strTitle}}</a></ion-card-title>
+            <ion-card-title *ngSwitchCase="false">{{recipe.strTitle}}</ion-card-title>
             <!-- <ion-card-subtitle>{{recipe.jsonRecipeData.image}}</ion-card-subtitle> -->
           </ion-card-header>
           <ion-card-content *ngIf="show.includes(i)">
             <ion-list>
               <ion-item *ngFor="let ingredient of recipe.jsonRecipeData.extendedIngredients">
-                <ion-label>{{ingredient.name}}</ion-label>
+                <ion-label class="ion-text-capitalize">{{ingredient.name}}</ion-label>
               </ion-item>
             </ion-list>
             <!-- <div [innerHtml]="recipe.jsonRecipeData.instructions"></div> -->

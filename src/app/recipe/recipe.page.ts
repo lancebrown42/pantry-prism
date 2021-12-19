@@ -177,23 +177,26 @@ export class RecipePage implements OnInit {
     }
   }
   async expandRecipe(ev: any, recipe: Recipe, index: number){
-    let details: RecipeInfo = recipe.jsonRecipeData;
-    // console.log(ev.currentTarget);
-    console.log(recipe);
-    // console.log(index);
-    // console.log(details);
-    this.spoonApi.getRecipeByID(recipe.intSpoonacularId).subscribe((rec)=>{
-      console.log(rec);
-      details = rec.jsonRecipeData;
-      // const image = recipe.jsonRecipeData.image;
-      // recipe.jsonRecipeData = null;
-      recipe.jsonRecipeData = JSON.parse(JSON.stringify(details));
+    if(this.show.includes(index)){
+      this.show.splice(this.show.indexOf(index),1);
+    }else{
+      let details: RecipeInfo = recipe.jsonRecipeData;
+      // console.log(ev.currentTarget);
       console.log(recipe);
-      this.show.push(index);
-      // console.log(recipe.jsonRecipeData.image);
-      // recipe.jsonRecipeData.image = image;
-
-    });
+      // console.log(index);
+      // console.log(details);
+      this.spoonApi.getRecipeByID(recipe.intSpoonacularId).subscribe((rec)=>{
+        console.log(rec);
+        details = rec.jsonRecipeData;
+        // const image = recipe.jsonRecipeData.image;
+        // recipe.jsonRecipeData = null;
+        recipe.jsonRecipeData = JSON.parse(JSON.stringify(details));
+        console.log(recipe);
+        this.show.push(index);
+        // console.log(recipe.jsonRecipeData.image);
+        // recipe.jsonRecipeData.image = image;
+      });
+    }
   }
 
 
