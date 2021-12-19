@@ -10,7 +10,7 @@ import { AutocompletePopoverComponent } from 'src/app/autocomplete-popover/autoc
 import { ItemCrudService } from '../services/item-crud.service';
 import { User } from '../models/user.model';
 import { Item } from '../models/item.model';
-import { RecipeInfo } from '../models/recipe-info.model';
+import { Ingredient, RecipeInfo } from '../models/recipe-info.model';
 
 
 
@@ -99,30 +99,30 @@ export class RecipePage implements OnInit {
       }else{
         console.log('nouser');
 
-        this.itemService.getAll()
-        .subscribe(
-          data=>{
-            this.source = JSON.parse(JSON.stringify(data));
-            // console.log(this.source);
-            for(const item of JSON.parse(JSON.stringify(this.source))){
-              // console.log(item);
-              // console.log('item');
-              // console.log(item);
-              const it = item;
-              // console.log('it');
-              // console.log(it);
-              this.inventory.push(it);
-            }
-            console.log('leaving popinv nouser');
+        // this.itemService.getAll()
+        // .subscribe(
+        //   data=>{
+        //     this.source = JSON.parse(JSON.stringify(data));
+        //     // console.log(this.source);
+        //     for(const item of JSON.parse(JSON.stringify(this.source))){
+        //       // console.log(item);
+        //       // console.log('item');
+        //       // console.log(item);
+        //       const it = item;
+        //       // console.log('it');
+        //       // console.log(it);
+        //       this.inventory.push(it);
+        //     }
+        //     console.log('leaving popinv nouser');
 
-          }
-          );
+        //   }
+        //   );
           await this.randomRecipes();
         }
   }
   async populateRecipes(caller: string){
     console.log('populate recipe caller: ', caller);
-    this.spoonApi.getRecipeByIngredients(this.inventory).subscribe((rec)=>{
+    this.spoonApi.getRecipeByIngredients(this.inventory, 10).subscribe((rec)=>{
       console.log('rec');
       console.log(rec);
       this.recipes = [];
@@ -197,6 +197,18 @@ export class RecipePage implements OnInit {
         // recipe.jsonRecipeData.image = image;
       });
     }
+  }
+  onhand(ingredient: Ingredient): boolean{
+    console.log(ingredient);
+    const have = this.inventory.filter(
+      itm=> {
+        console.log(itm);
+        return itm.spoonacularId === ingredient.id;
+      }
+    );
+    console.log(have);
+    return (have.length > 0);
+
   }
 
 

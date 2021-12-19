@@ -40,10 +40,12 @@ export class ItemAddPage implements OnInit {
       // this.itemList$ = this.spoonApi.getItemSuggestion(search, 5);
       if(this.popover){
         console.log('POPOVER ALREADY OPEN');
-        await this.popover.dismiss();
+        await this.popover.dismiss().then(this.popover = null);
         // await this.popover.onDidDismiss();
+      }else{
+
+        this.presentPopover(searchTerm$);
       }
-      this.presentPopover(searchTerm$);
     });
     // this.itemList$ = combineLatest([itemList$, searchTerm$]).pipe(
     //   map(([itemList, searchTerm])=>

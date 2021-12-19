@@ -90,17 +90,42 @@ export class inventoryPage implements OnInit{
         console.log(modalDataResponse.data);
       }
       return modalDataResponse.data;
-    }).then(async (data)=>{
-      console.log('data');
-      console.log(data);
-      const itemCreate = this.itemService.addBatch(data, this.user).subscribe((added: Item[]) => {
+    }).then(async (items)=>{
+      console.log('items');
+      console.log(items);
+      let parsedItems: Item[] = [];
+      let parsings: Observable<Item>[] = [];
+      for (let item of items){
+        parsings.push(this.spoon.parseItems(item));
+        // const parse = this.spoon.parseItems(item).subscribe(async (data)=>{
+        //   console.log('parsed:');
+        //   console.log(data);
+        //   parsedItems.push(data);
+        // });
+      }
+      const p = async ()=>{
+        console.log('in p');
+        for await(let parse of parsings){
+          await parse.toPromise().then((data)=>{
+          console.log('parsed:');
+          console.log(data);
+          parsedItems.push(data);
+        });
+        return parsedItems;
+      }
+    };
+    console.log('pre p');
+
+      const itemCreate = this.itemService.addBatch(await p(), this.user).subscribe((added: Item[]) => {
         for (let itm of added) {
           this.inventory.push(itm);
           console.log('added ', itm, ' to ', this.user);
         }
+        this.populateInventory();
       });
       console.log('Item service returned', itemCreate);
-    });
+
+  });
 
     return await modal.present();
   }

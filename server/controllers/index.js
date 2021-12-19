@@ -5,7 +5,8 @@ var request = require('request');
 const env = require('../env.json');
 const item = require('../models/item');
 const user = require('../models/user');
-const recipe = require('../models/recipe')
+const recipe = require('../models/recipe');
+const { nextTick } = require('process');
 
 
 
@@ -343,7 +344,7 @@ const getItemSuggestion= async(req, res)=>{
             // console.log(obj);
             for(spoonItem of obj){
                 // console.log("spoonItem:")
-                // console.log(spoonItem);
+                console.log(spoonItem);
                 var i = {
                     spoonacularId: spoonItem.id,
                     strDescription: spoonItem.name,
@@ -360,6 +361,65 @@ const getItemSuggestion= async(req, res)=>{
             return res.status(200).json(items);
             
           });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+const parseIngredients= async(req, res)=>{
+    try {
+        console.log(req.body)
+        var item = req.body.strDescription;
+        const options = {
+            method: 'POST',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/parseIngredients',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+          'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+          'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419',
+          useQueryString: true
+        },
+        form: {'ingredientList': item}
+    };
+        var items = [];
+        // var list = [];
+        // for (ing of req.body){
+        //     var item = ing.strDescription
+        //     list.push(item)
+        //     // console.log(list)
+        //     const options = {
+        //         method: 'POST',
+        //         url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/parseIngredients',
+        //         headers: {
+        //             'content-type': 'application/x-www-form-urlencoded',
+        //       'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+        //       'x-rapidapi-key': '815fe80cd9msh2d8fb201641104fp1919d5jsnfd64f7e24419',
+        //       useQueryString: true
+        //     },
+        //     form: {'ingredientList': item}
+        // };
+        
+        await request(options, async (error, response, body)=> {
+              if (error) throw new Error(error);
+              
+              console.log(body);
+              var spoonItem = JSON.parse(response.body)[0]
+            // console.log(obj);
+                console.log(spoonItem);
+                var i = {
+                    spoonacularId: spoonItem.id,
+                    strDescription: spoonItem.name,
+                    strImage: "https://spoonacular.com/cdn/ingredients_250x250/" + spoonItem.image
+                }
+
+                items.push(i);
+
+            
+                console.log(i);
+                return res.status(200).json(i);
+        });
+    // }
+    console.log('items')
+    console.log(items)
     } catch (error) {
         return res.status(500).json({error: error.message})
     }
@@ -655,6 +715,7 @@ module.exports = {
     getRecipeId,
     json,
     updateQty,
+    parseIngredients,
 
 
 }

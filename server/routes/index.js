@@ -32,6 +32,7 @@ router.get('/getProductSuggest/:name/:numberOfResults?/:intolerances?', controll
 
 router.get('/getItemId/:id', controllers.getItemByID);
 
+router.put('/parseItems/', controllers.parseIngredients);
 // router.post('/addItemBatch', (req, res)=>{console.log(req);return res.status(418)});
 router.post('/addItemBatch', controllers.addItemBatch);
 

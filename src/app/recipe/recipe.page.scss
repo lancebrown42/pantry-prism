@@ -30,3 +30,9 @@
     color: black;
     pointer-events: none;
   }
+  .onhand{
+    --background-color: --ion-color-success;
+  }
+  .needed{
+    --background-color: --ion-color-danger;
+  }

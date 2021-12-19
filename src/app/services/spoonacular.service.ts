@@ -54,4 +54,8 @@ export class SpoonacularService {
     return this.http.get<Recipe[]>(this.baseUrl + 'recipes/random/' + (numResults ?? '5') + '/' + (tags ?? ''));
 
   }
+
+  parseItems(items: Item): Observable<Item>{
+    return this.http.put<Item>(this.baseUrl + 'parseItems/', items);
+  }
 }
