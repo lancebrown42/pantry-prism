@@ -30,11 +30,11 @@
           <!-- </ion-col>
           <ion-col class="ion-nowrap" size="3"> -->
 
-            <div class="quantity ion-nowrap ion-text-right" slot="end">
-              
-              <ion-button class="decrement" #decrement (click)="item.intQuantity = item.intQuantity-1"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
-              <ion-input class="qtyCounter" #qty type="number" [ngModel]="item.intQuantity"></ion-input>
-              <ion-button class="increment" #increment (click)="item.intQuantity = item.intQuantity+1"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+            <div class="quantity ion-nowrap ion-text-right" slot="end" [formGroup]="qtyGrp">
+          
+              <ion-button class="decrement" #decrement (click)="decrementItm(item)"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+              <ion-input class="qtyCounter" #qty type="number" [formControlName]="item.intItemId.toString() + 'ctrl'"></ion-input>
+              <ion-button class="increment" #increment (click)="incrementItm(item)"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
             </div>
           <!-- </ion-col> -->
           

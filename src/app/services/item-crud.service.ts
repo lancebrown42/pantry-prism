@@ -40,4 +40,8 @@ export class ItemCrudService {
     console.log(user.intUserId);
     return this.http.get<any[]>(this.baseUrl + 'grocery/' + user.intUserId);
   }
+  updateQty(item: Item, user: User, qty: number): Observable<any>{
+    // console.log('update: ' + item + user + qty);
+    return this.http.put<any>(this.baseUrl + 'items/', {item, user, qty});
+  }
 }

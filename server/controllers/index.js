@@ -136,6 +136,57 @@ const getAllItems = async(req, res)=>{
         return res.status(500).json({ error: error.message })
     }
 }
+const updateQty = async(req, res)=>{
+    try{
+        var item = await Item.update({intQuantity: req.body.item.intQuantity}, {where :{
+            intItemId: req.body.item.intItemId
+        }});
+        var item = await Item.findOne(req.body.item);
+        // console.log('break \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n item');
+        // console.log(item);
+        var t = await User.findOne({where: {
+            intUserId: req.body.user.intUserId,
+            '$Items.intItemId$': req.body.item.intItemId
+        },
+        include:[
+            {model: Item},
+            
+            
+        ]}).then(tmp=>{
+            // console.log('user');
+            // console.log(tmp);
+            // console.log(tmp.Items)
+            
+        })
+
+        // console.log('user \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n break');
+
+        var user = await User.findOne({where: {
+            intUserId: req.body.user.intUserId,
+            '$Items.intItemId$': req.body.item.intItemId
+        },
+        include:[
+            {model: Item},
+            
+            
+        ]}).then(function(usr){
+            // console.log(usr)
+            return usr.update({Item:{intQuantity: parseInt(req.body.qty)}},{where:{Item:{intItemId: req.body.item.intItemId}}}).then(function(result){
+                console.log(JSON.parse(JSON.stringify(result)))
+                return result;
+            })})
+        
+        // console.log(req.body.qty);
+        // item = await item.update({intQuantity: parseInt(req.body.qty)});
+        // console.log(item);
+        // user = await user.update(item)
+        // console.log(user);
+        return res.status(204).json(user)
+    }
+    catch(error){
+        return res.status(500).json({ error: error.message, stack: error.stack })
+    }
+}
 const addItemBatch = async (req, res) => {
     // console.log('req.body')
     // console.log(req.body)
@@ -154,7 +205,8 @@ const addItemBatch = async (req, res) => {
                 for(itm of items){
                     itm = await Item.create(itm);
                     // console.log("adding ", itm, " to user ", usr.strFirstName)
-                    addedItems.push(await usr.addItems(itm))
+                    await usr.addItems(itm)
+                    addedItems.push(itm)
                 };
             
         }else{
@@ -602,6 +654,7 @@ module.exports = {
     getGrocery,
     getRecipeId,
     json,
+    updateQty,
 
 
 }

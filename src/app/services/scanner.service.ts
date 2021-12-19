@@ -4,6 +4,8 @@ import { BarcodeScanner, BarcodeScanResult } from '@ionic-native/barcode-scanner
 import { SpoonacularService } from './spoonacular.service';
 import { AlertController } from '@ionic/angular';
 import { present } from '@ionic/core/dist/types/utils/overlays';
+import { Item } from '../models/item.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +14,10 @@ export class ScannerService {
 
   constructor(private barcodeScanner: BarcodeScanner, private spoon: SpoonacularService,
     public alertController: AlertController) { }
-  scanBarcode(){
-    this.barcodeScanner.scan().then(barcodeData => {
+  scanBarcode(): Promise<any>{
+    return this.barcodeScanner.scan().then(barcodeData => {
       console.log('Barcode data', JSON.stringify(barcodeData));
-      this.lookupUPC(barcodeData);
+      return this.lookupUPC(barcodeData);
      }).catch(err => {
          console.log('Error', err);
      });
@@ -26,7 +28,7 @@ export class ScannerService {
       console.log(barcode.text);
       const thing = this.spoon.getItemUPC('a');
       console.log(thing);
-      this.presentAlertSuccess();
+      // this.presentAlertSuccess();
       return thing;
     }
     else{
@@ -51,8 +53,8 @@ export class ScannerService {
   async presentAlertSuccess() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Alert',
-      subHeader: 'Subtitle',
+      header: 'Success',
+      subHeader: 'Item added',
       message: 'Added',
       buttons: ['OK']
     });

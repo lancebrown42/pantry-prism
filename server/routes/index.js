@@ -49,6 +49,6 @@ router.get('/recipe/:id', controllers.getRecipeId);
 
 router.get('/json/:version?', controllers.json);
 
-
+router.put('/items', controllers.updateQty);
 
 module.exports = router;
