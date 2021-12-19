@@ -18,7 +18,12 @@
             <!-- <ion-card-subtitle>{{recipe.jsonRecipeData.image}}</ion-card-subtitle> -->
           </ion-card-header>
           <ion-card-content *ngIf="show.includes(i)">
-            <div [innerHtml]="recipe.jsonRecipeData.instructions"></div>
+            <ion-list>
+              <ion-item *ngFor="let ingredient of recipe.jsonRecipeData.extendedIngredients">
+                <ion-label>{{ingredient.name}}</ion-label>
+              </ion-item>
+            </ion-list>
+            <!-- <div [innerHtml]="recipe.jsonRecipeData.instructions"></div> -->
           </ion-card-content>
         </ion-card>
         

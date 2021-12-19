@@ -38,7 +38,7 @@ const sequelize = new Sequelize(database, userName, password,{
 // const UserItem = require('./models/UserItem')
 // const Item =  require('./models/Item')
 
-const{User,UserItem,Item} = require('./models')
+const{User,UserItem,Item,Grocery,UserGrocery} = require('./models')
 
 /**old db conn */
 // var db = require('./model/dbConn');
@@ -83,6 +83,14 @@ sequelize
     UserItem.belongsTo(Item,{foreignKey: {
       name:'intItemId',
     }});
+    User.hasMany(UserGrocery,{foreignKey: {
+      name:'intUserId',
+    }});
+    User.belongsToMany(Grocery,
+      {through: 'UserGrocery',
+    foreignKey:{
+      name:'intUserId'
+    }})
 
       
   }).then(()=>{
@@ -132,6 +140,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', routes);
+app.use('/json', express.Router().get('/:version?', require('./controllers/index').json))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

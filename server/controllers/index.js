@@ -38,6 +38,7 @@ const getUserById = async(req, res)=>{
     }
 }
 const createGrocery = async (req, res) => {
+    var addedItems = [];
     console.log('req.body')
     console.log(req.body)
     try {
@@ -48,24 +49,44 @@ const createGrocery = async (req, res) => {
             items = JSON.parse(body).items
             console.log(items)
             const usr =await User.findByPk(users.intUserId);
+            console.log("usr");
             console.log(usr)
 
             
             for(itm of items){
                 itm = await Item.create(itm);
-                groc = await usr.addGrocery()
-                console.log("adding ", itm, " to user ", usr.strFirstName)
-                addedItems.push(await usr.addItems(itm))
+                groc = await Grocery.create({strStatus:'open'})
+                await groc.addItem(itm);
+                addedItems.push(await usr.addGrocery(groc));
+                // console.log("adding ", itm, " to user ", usr.strFirstName)
+                // addedItems.push(await usr.addItems(itm))
             };
         return res.status(201).json(addedItems,);
     } catch (error) {
+        console.log(error.message)
         return res.status(500).json({ error: error.message, "stack" : error.stack })
     }
 }
 const getGrocery = async(req, res)=>{
+    console.log("Get groc")
+    groc = [];
     try{
-        const user = await User.findByPk(req.params.id);
-        return res.status(200).json(user)
+        const user = await User.findOne({
+            where:{
+                intUserId: req.params.intUserId,
+            },
+            include: Grocery
+        });
+        for(gr of user.Groceries){
+            groc.push(await Grocery.findOne({
+                where:{
+                    intGroceryId: gr.intGroceryId
+                },
+                include: Item
+            }))
+        }
+        console.log(groc)
+        return res.status(200).json(groc)
     }
     catch(error){
         return res.status(500).json({ error: error.message })
@@ -116,23 +137,23 @@ const getAllItems = async(req, res)=>{
     }
 }
 const addItemBatch = async (req, res) => {
-    console.log('req.body')
-    console.log(req.body)
+    // console.log('req.body')
+    // console.log(req.body)
     try {
-        console.log(req.body)
+        // console.log(req.body)
         var body = JSON.stringify(req.body);
         var addedItems = [];
         if(body.includes('intUserId')){
             users = JSON.parse(body).user;
             items = JSON.parse(body).items
-            console.log(items)
+            // console.log(items)
             const usr =await User.findByPk(users.intUserId);
-            console.log(usr)
+            // console.log(usr)
 
             
                 for(itm of items){
                     itm = await Item.create(itm);
-                    console.log("adding ", itm, " to user ", usr.strFirstName)
+                    // console.log("adding ", itm, " to user ", usr.strFirstName)
                     addedItems.push(await usr.addItems(itm))
                 };
             
@@ -141,7 +162,7 @@ const addItemBatch = async (req, res) => {
             items = JSON.parse(JSON.stringify(req.body))
             
             for(itm of items){
-                console.log("adding ", itm)
+                // console.log("adding ", itm)
                 addedItems.push(await Item.create(itm))
             };
         }
@@ -180,7 +201,7 @@ const getItemByUPC = async(req, res)=>{
           request(options, function (error, response) {
             if (error) throw new Error(error);
             
-            console.log(response.body);
+            // console.log(response.body);
           });
     } catch (error) {
         return res.status(500).json({error: error.message})
@@ -197,7 +218,7 @@ const getItemByName= async(req, res)=>{
           request(options, function (error, response) {
             if (error) throw new Error(error);
             
-            console.log(response.body);
+            // console.log(response.body);
           });
     } catch (error) {
         return res.status(500).json({error: error.message})
@@ -214,7 +235,7 @@ const getItemByID= async(req, res)=>{
           request(options, function (error, response) {
             if (error) throw new Error(error);
             
-            console.log(response.body);
+            // console.log(response.body);
           });
     } catch (error) {
         return res.status(500).json({error: error.message})
@@ -239,9 +260,9 @@ const getRecipeSuggestions= async(req, res)=>{
             var obj = JSON.parse(body) //for testing with live data
           //   var obj = JSON.parse(JSON.stringify(test)) //for testing without live data -- remember to comment out api key if using this
             var ret = [];
-            console.log(obj);
+            // console.log(obj);
             for(fullrecipe of obj){
-                console.log(fullrecipe);
+                // console.log(fullrecipe);
                 var rec = Recipe.build({intSpoonacularId: fullrecipe.id, strTitle: fullrecipe.title, jsonRecipeData: {image: "https://spoonacular.com/recipeImages/" + fullrecipe.id + "-636x393." + fullrecipe.imageType}})
                 ret.push(rec);
             }
@@ -267,23 +288,23 @@ const getItemSuggestion= async(req, res)=>{
           request(options, function (error, response) {
             if (error) throw new Error(error);
             var obj = JSON.parse(response.body)
-            console.log(obj);
+            // console.log(obj);
             for(spoonItem of obj){
-                console.log("spoonItem:")
-                console.log(spoonItem);
+                // console.log("spoonItem:")
+                // console.log(spoonItem);
                 var i = {
                     spoonacularId: spoonItem.id,
                     strDescription: spoonItem.name,
                     strImage: "https://spoonacular.com/cdn/ingredients_250x250/" + spoonItem.image
                 }
-                console.log("pushed item:")
+                // console.log("pushed item:")
                 items.push(i);
-                console.log(i)
+                // console.log(i)
             }
-            console.log("response bodt");
-            console.log(response.body);
-            console.log("items array:");
-            console.log(items);
+            // console.log("response bodt");
+            // console.log(response.body);
+            // console.log("items array:");
+            // console.log(items);
             return res.status(200).json(items);
             
           });
@@ -307,23 +328,23 @@ const getProductSuggestion= async(req, res)=>{
           request(options, function (error, response) {
             if (error) throw new Error(error);
             var obj = JSON.parse(response.body).products
-            console.log(obj);
+            // console.log(obj);
             for(spoonItem of obj){
-                console.log("spoonItem:")
-                console.log(spoonItem);
+                // console.log("spoonItem:")
+                // console.log(spoonItem);
                 var i = {
                     spoonacularId: spoonItem.id,
                     strDescription: spoonItem.title,
                     strImage: spoonItem.image
                 }
-                console.log("pushed item:")
+                // console.log("pushed item:")
                 items.push(i);
-                console.log(i)
+                // console.log(i)
             }
-            console.log("response bodt");
-            console.log(response.body);
-            console.log("items array:");
-            console.log(items);
+            // console.log("response bodt");
+            // console.log(response.body);
+            // console.log("items array:");
+            // console.log(items);
             return res.status(200).json(items);
             
           });
@@ -372,9 +393,9 @@ const getRandomRecipes = async(req, res)=>{
             var obj = JSON.parse(body).recipes //for testing with live data
             //   var obj = JSON.parse(JSON.stringify(test)) //for testing without live data -- remember to comment out api key if using this
             var ret = [];
-            console.log(obj);
+            // console.log(obj);
             for (fullrecipe of obj) {
-                console.log(fullrecipe);
+                // console.log(fullrecipe);
                 var rec = Recipe.build({ intSpoonacularId: fullrecipe.id, strTitle: fullrecipe.title, jsonRecipeData: { image: "https://spoonacular.com/recipeImages/" + fullrecipe.id + "-636x393." + (fullrecipe.imageType ? fullrecipe.imageType : 'jpg') } })
                 ret.push(rec);
             }
@@ -385,15 +406,15 @@ const getRandomRecipes = async(req, res)=>{
     }
 }
 const getRecipeIngredients = async (req, res) =>{
-    console.log("ENTER RECINGRED");
+    // console.log("ENTER RECINGRED");
     try {
         var body = JSON.parse(JSON.stringify(req.body))
-        console.log("BODY");
-        console.log(body);
+        // console.log("BODY");
+        // console.log(body);
         
         var ingredients = body.ingredients;
-        console.log("INGREDIENTS")
-        console.log(ingredients);
+        // console.log("INGREDIENTS")
+        // console.log(ingredients);
         var ingredientsString = "";
         var recipes = [];
         var num = body.num ? Number(body.num) : 1;
@@ -403,12 +424,12 @@ const getRecipeIngredients = async (req, res) =>{
             // console.log(ing.strDescription);
             //// console.log("len", ingredientsString.length)
             if(ingredientsString.length > 0){
-                console.log("if", ing)
+                // console.log("if", ing)
                 ing.strDescription = encodeURIComponent(ing.strDescription)
                 ingredientsString =  ingredientsString.concat(',',ing.strDescription);
             }
             else{
-                console.log("else", ing)
+                // console.log("else", ing)
                 ingredientsString = encodeURIComponent(ing.strDescription);
             }
             // ingredientsString.concat(ing.strDescription)
@@ -418,7 +439,7 @@ const getRecipeIngredients = async (req, res) =>{
         // console.log(num);
         // console.log("outside str ", ingredientsString);
         
-        console.log("ingStr: ", ingredientsString);
+        // console.log("ingStr: ", ingredientsString);
         const options = {
             method: 'GET',
             url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients',
@@ -437,8 +458,8 @@ const getRecipeIngredients = async (req, res) =>{
           
           request(options, function (error, response, body) {
               if (error) throw new Error(error);
-              console.log("spoon body");
-              console.log(body)
+            //   console.log("spoon body");
+            //   console.log(body)
                       var obj = JSON.parse(body) //for testing with live data
                     //   var obj = JSON.parse(JSON.stringify(test)) //for testing without live data -- remember to comment out api key if using this
                       var ret = [];
@@ -460,6 +481,20 @@ const getRecipeIngredients = async (req, res) =>{
         
     } catch (error) {
         return res.status(500).json({error: error.message, stack: error.stack})
+    }
+}
+const json = async(req, res)=>{
+    console.log("get json");
+    try{
+        if (req.params.version){
+            return res.status(200).json({version: "1.0.0"});
+        }
+        else{
+            return res.status(200).json({json: "json"});
+        }
+    }catch(error){
+        return res.status(500).json({error: error.message, stack: error.stack})
+
     }
 }
 
@@ -566,6 +601,7 @@ module.exports = {
     createGrocery,
     getGrocery,
     getRecipeId,
+    json,
 
 
 }

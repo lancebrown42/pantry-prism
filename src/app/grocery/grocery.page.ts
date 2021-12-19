@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -20,7 +21,7 @@ export class GroceryPage implements OnInit{
   user: User = JSON.parse(sessionStorage.getItem('user'));
   items: Item[];
   public searchField: FormControl;
-  public itemList$: Observable<Item[]>;
+  public itemList$: Observable<{Items: Item[]; dtmDate: Date; intGroceryId: number; strStatus: string}[]>;
   popOpen: boolean;
   popover: HTMLIonPopoverElement;
   constructor(
@@ -38,7 +39,17 @@ export class GroceryPage implements OnInit{
       debounceTime(500),
       startWith(this.searchField)
     );
-    this.itemList$ = this.itemCtrl.getGrocery(this.user);
+    this.itemList$ = await this.itemCtrl.getGrocery(this.user);
+    this.itemList$.subscribe(items=>{
+      console.log(items);
+      for(const item of items){
+        for(const i of item.Items){
+          this.items.push(i);
+        }
+      }
+
+      console.log(this.items);
+    });
 
     // this.items.push(new Item());
     this.searchField.valueChanges.subscribe(async search=>{
@@ -62,6 +73,7 @@ export class GroceryPage implements OnInit{
     createItem.strDescription = box.value;
     createItem.intQuantity = 1;
     const manual = this.itemCtrl.addGrocery(this.user, [createItem]).subscribe((ret)=>this.items.push(ret));
+    console.log(manual);
   }
   async presentPopover(ev: any) {
     this.popover = await this.popoverController.create({

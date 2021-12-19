@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
           name: 'intGroceryId'
         }
       })
-      this.belongsTo(models.User,{
+      this.belongsToMany(models.User,{
         through: 'UserGrocery',
         foreignKey:{
           name: 'intGroceryId'
@@ -38,14 +38,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
   },
     strStatus: DataTypes.STRING,
-    dtmDate: DataTypes.DATE
+    dtmDate: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     sequelize,
     modelName: 'Grocery',
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'TGrocery',
+    tableName: 'TGroceries',
   });
   return Grocery;
 };

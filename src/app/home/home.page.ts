@@ -26,6 +26,9 @@ export class HomePage implements OnInit {
     console.log('viewWillEnter');
     console.log(this.loggedIn);
   }
+  ionViewWillLeave(){
+    console.log('willleave');
+  }
   logout(){
     console.log('LOGOUT');
     sessionStorage.removeItem('user');

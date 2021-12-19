@@ -35,7 +35,9 @@ export class ItemCrudService {
   addGrocery(user: User, items: Item[]): Observable<any>{
     return this.http.post(this.baseUrl + 'grocery/', {user, items});
   }
-  getGrocery(user: User): Observable<Item[]>{
-    return this.http.get<Item[]>(this.baseUrl + 'grocery/' + user.intUserId);
+  getGrocery(user: User): Observable<any[]>{
+    console.log('getGrocery');
+    console.log(user.intUserId);
+    return this.http.get<any[]>(this.baseUrl + 'grocery/' + user.intUserId);
   }
 }

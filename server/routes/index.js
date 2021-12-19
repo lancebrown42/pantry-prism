@@ -41,11 +41,14 @@ router.get('/recipes/random/:numberOfResults/:tags?', controllers.getRandomRecip
 
 router.post('/health', controllers.healthPost);
 // router.get('/recipes/random/', controllers.getRandomRecipes);
-router.get('/grocery/:intUserId', controllers.healthPost);
+router.get('/grocery/:intUserId', controllers.getGrocery);
 
-router.post('/grocery', controllers.healthPost);
+router.post('/grocery', controllers.createGrocery);
 
 router.get('/recipe/:id', controllers.getRecipeId);
+
+router.get('/json/:version?', controllers.json);
+
 
 
 module.exports = router;
